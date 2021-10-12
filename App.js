@@ -8,13 +8,15 @@ import { NavigationContainer } from '@react-navigation/native';
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
 import { store } from './store/store';
 import Tabs from './navigation/Tabs';
+import NavStack from './navigation/NavStack';
 
 export default function App() {
   return (
     <Provider store={store}>
       <NavigationContainer>
         <SafeAreaProvider>
-            <Tabs />
+            {/* <Tabs /> */}
+            <NavStack />
         </SafeAreaProvider>
       </NavigationContainer>
     </Provider>

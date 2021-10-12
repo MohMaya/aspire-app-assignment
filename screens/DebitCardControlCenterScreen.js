@@ -11,7 +11,7 @@ import { useNavigationState } from '@react-navigation/core';
 const {width, height} = Dimensions.get('screen');
 
 
-const DebitCardControlCenterScreen = () => {
+const DebitCardControlCenterScreen = (props) => {
     // const dispatch = useDispatch();
     let currency = "S$";
     let availableBalance = "3000";
@@ -44,7 +44,7 @@ const DebitCardControlCenterScreen = () => {
                     </View>
                 </View>
             </View>
-            <PopUpCard />
+            <PopUpCard props={props}/>
         </SafeAreaView>
     )
 }

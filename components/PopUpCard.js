@@ -82,7 +82,8 @@ const renderSpendingLimitBar = (renderFlag, limitExhausted, totalLimit, currency
     }
 }
 
-const PopUpCard = () => {
+const PopUpCard = (props) => {
+    
     let cardDetailsDisplayed = () => false//selectCardNumberVisible;
     let cardNumber = () => "1234567887654321"//selectCardNumber;
     let cardValidThru = () => "12/20"//selectCardValidThru;
@@ -196,7 +197,7 @@ const PopUpCard = () => {
                     <View style={{height: height-243-CARD_HEIGHT-32, marginTop: 26, marginBottom: 30, marginLeft: 24, marginRight: 24, width: width-48}}>
                         {/* Menu Options to be displayed here */}
                         {renderSpendingLimitBar(isSpendingLimitSet(), spendingLimitExhausted(), spendingLimit(), currencyUnits())}
-                        <MenuItems />
+                        <MenuItems props={props}/>
                     </View>
                 </View>
             </ScrollView>
@@ -226,7 +227,7 @@ const styles = StyleSheet.create({
         height: 8,
         width: 8,
         borderRadius: 8,
-        margin: 4,
+        margin: 2,
         backgroundColor: 'white',
     },
     shadow:{

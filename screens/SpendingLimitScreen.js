@@ -1,7 +1,8 @@
 import React from 'react'
-import { StyleSheet, View, SafeAreaView, Image, Dimensions, TouchableOpacity } from 'react-native'
+import { StyleSheet, View, SafeAreaView, Image, Dimensions, TouchableOpacity, Text } from 'react-native'
 import { Button, Icon } from 'react-native-elements'
 import tw from 'tailwind-react-native-classnames'
+import SpendingLimitBottomComponent from '../components/SpendingLimitBottomComponent'
 
 const SpendingLimitScreen = () => {
     return (
@@ -37,7 +38,9 @@ const SpendingLimitScreen = () => {
                             source={require("../assets/Logo.png")}
                         />
                     </View>
+                    <Text style={{color:'white', fontWeight:'bold', fontSize:24, marginTop: 19}}>Spending limit</Text>
                 </View>
+                <SpendingLimitBottomComponent />
             </View>
         </SafeAreaView>
     )

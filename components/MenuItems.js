@@ -1,9 +1,51 @@
 import React from 'react'
-import { Image, StyleSheet, Text, View } from 'react-native'
+import { Image, StyleSheet, Text, View, TouchableOpacity } from 'react-native'
 import { FlatList } from 'react-native';
-import { TouchableOpacity } from 'react-native-web';
 
-const MenuItems = () => {
+
+const renderButton = (buttonState) => {
+    if(buttonState == -1){
+        //No Button Present
+        return (<View style={{display:'none'}}></View>);
+    }
+    else if(buttonState == 0){
+        return (
+            <View style={{
+                alignItems: 'flex-end',
+                flex:1
+            }}>
+                <Image
+                    style={{
+                        width: 34,
+                        height: 20,
+                    }}
+                    source={require("../assets/toggle.png")}
+                    resizeMode='contain'
+                />
+            </View>
+        );
+    }
+    else if(buttonState == 1){
+        return (
+            <View style={{
+                alignItems: 'flex-end',
+                flex:1
+            }}>
+                <Image
+                    style={{
+                        width: 34,
+                        height: 20,
+                    }}
+                    source={require("../assets/activeToggle.png")}
+                    resizeMode='contain'
+                />
+            </View>
+        );
+    }
+}
+
+
+const MenuItems = props => {
     let spendingLimit = () => 5000;
     let currencyUnits = () => "S$";
     let isSpendingLimitSet = () => true;
@@ -14,49 +56,85 @@ const MenuItems = () => {
             menuTitle: "Top-up account",                                    // The Title of the menu Item
             menuSubtitle: "Deposit money to your account to use with card", // The subtitle of the menu Item
             iconAssetUri: require("../assets/insight.png"),                             // Uri for the icon
+            buttonState: -1,                                                //A parameter that suggest about the radio button -1: Hidden; 0: Button inactive; 1: Button active 
         },
         {
             key: "MenuItem#2",                                              // A unique key to supress the warning and optimize changes
             menuTitle: "Weekly spending limit",                                    // The Title of the menu Item
             menuSubtitle: isSpendingLimitSet() ? "Your weekly spending limit is "+currencyUnits()+" "+spendingLimit() : "You haven't set any spending limit on card", // The subtitle of the menu Item
             iconAssetUri: require("../assets/Transfer-2.png"),                             // Uri for the icon
+            buttonState: 1,                                                //A parameter that suggest about the radio button -1: Hidden; 0: Button inactive; 1: Button active
         },
         {
             key: "MenuItem#3",                                              // A unique key to supress the warning and optimize changes
             menuTitle: "Freeze card",                                    // The Title of the menu Item
             menuSubtitle: "Your debit card is currently active", // The subtitle of the menu Item
             iconAssetUri: require("../assets/Transfer-3.png"),                             // Uri for the icon
+            buttonState: 0,                                                //A parameter that suggest about the radio button -1: Hidden; 0: Button inactive; 1: Button active
         },
         {
             key: "MenuItem#4",                                              // A unique key to supress the warning and optimize changes
             menuTitle: "Get a new card",                                    // The Title of the menu Item
             menuSubtitle: "This deactivates your current debit card", // The subtitle of the menu Item
             iconAssetUri: require("../assets/Transfer-1.png"),                             // Uri for the icon
+            buttonState: -1,                                                //A parameter that suggest about the radio button -1: Hidden; 0: Button inactive; 1: Button active
         },
         {
             key: "MenuItem#5",                                              // A unique key to supress the warning and optimize changes
             menuTitle: "Deactivated cards",                                    // The Title of the menu Item
             menuSubtitle: "Your previously deactivated cards", // The subtitle of the menu Item
             iconAssetUri: require("../assets/Transfer.png"),                             // Uri for the icon
+            buttonState: -1,                                                //A parameter that suggest about the radio button -1: Hidden; 0: Button inactive; 1: Button active
         }
     ];
+
+    const loadMenuItem = (menuKey) => {
+        switch(menuKey) {
+            case "MenuItem#1":
+                console.log("Top-Up Account Selected");
+                break;
+            case "MenuItem#2":
+                console.log("Weekly spending limit Selected");
+                props.props.props.navigation.navigate('SpendingLimit');
+                break;
+            case "MenuItem#3":
+                console.log("Freeze card Selected");
+                break;
+            case "MenuItem#4":
+                console.log("Get a new card Selected");
+                break;
+            case "MenuItem#5":
+                console.log("Deactivated cards Selected");
+                break;
+            default:
+                //Do Nothing
+                return
+        }
+    }
 
     return (
         <FlatList
             data={menuArr}
             renderItem={({item}) => {
                 return (
-                    <View style={styles.menuItem}>
-                        <Image
-                            style={{width: 32}}
-                            source={item.iconAssetUri}
-                            resizeMode='contain'
-                        />
-                        <View style={{flexDirection:'column', marginLeft:12}}>
-                            <Text style={styles.menuTitle}>{item.menuTitle}</Text>
-                            <Text style={styles.menuSubtitle}>{item.menuSubtitle}</Text>
+                    <TouchableOpacity
+                        onPress={() => {
+                            loadMenuItem(item.key);
+                        }}
+                    >
+                        <View style={styles.menuItem}>
+                            <Image
+                                style={{width: 32}}
+                                source={item.iconAssetUri}
+                                resizeMode='contain'
+                            />
+                            <View style={{flexDirection:'column', marginLeft:12}}>
+                                <Text style={styles.menuTitle}>{item.menuTitle}</Text>
+                                <Text style={styles.menuSubtitle}>{item.menuSubtitle}</Text>
+                            </View>
+                            {renderButton(item.buttonState)}
                         </View>
-                    </View>
+                    </TouchableOpacity>
                 );
             }}
             scrollEnabled={false}

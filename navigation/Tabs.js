@@ -4,7 +4,6 @@ import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 import DebitCardControlCenterScreen from '../screens/DebitCardControlCenterScreen';
 import { setCompleteCardDetails } from '../store/slices/navSlice';
 import { useDispatch } from 'react-redux';
-import SpendingLimitScreen from '../screens/SpendingLimitScreen';
 
 
 const Tab = createBottomTabNavigator();
@@ -20,6 +19,8 @@ const secondaryUserData = {
     weeklySpendingLimitExhausted: null
 }
 
+
+
 const Tabs = () => {
 
     return (
@@ -33,50 +34,58 @@ const Tabs = () => {
             initialRouteName='Debit Card'
         >
             {/* Assigning all tabs to redirect to DebitControlCenterScreen since it is the only screen shared with us*/}
-            <Tab.Screen name="Home" component={DebitCardControlCenterScreen} options={{
-                tabBarIcon: ({focused}) => (
-                    <View 
-                        style={{
-                            alignItems:'center',
-                            justifyContent:'center',
-                        }}
-                    >
-                        <Image
-                            source={require("../assets/Home.png")}
-                            resizeMode='contain'
+            <Tab.Screen 
+                name="Home" 
+                component={DebitCardControlCenterScreen} 
+                options={{
+                    tabBarIcon: ({focused}) => (
+                        <View 
                             style={{
-                                width:24,
-                                height:24,
+                                alignItems:'center',
+                                justifyContent:'center',
                             }}
-                        />
-                        <Text style={{fontSize:9, color: "#DDDDDD"}}>Home</Text>
-                        {/* These elements will always be set to gray since they are not supposed to be focused as per the shared SR Doc */}
-                    </View>
-                )
-            }}/>
-            <Tab.Screen name="Debit Card" component={DebitCardControlCenterScreen}  options={{
-                tabBarIcon: ({focused}) => (
-                    <View 
-                        style={{
-                            alignItems:'center',
-                            justifyContent:'center',
-                        }}
-                    >
-                        <Image
-                            source={require("../assets/pay.png")}
-                            resizeMode='contain'
+                        >
+                            <Image
+                                source={require("../assets/Home.png")}
+                                resizeMode='contain'
+                                style={{
+                                    width:24,
+                                    height:24,
+                                }}
+                            />
+                            <Text style={{fontSize:9, color: "#DDDDDD"}}>Home</Text>
+                            {/* These elements will always be set to gray since they are not supposed to be focused as per the shared SR Doc */}
+                        </View>
+                    ),
+                }}
+            />
+            <Tab.Screen 
+                name="Debit Card" 
+                component={DebitCardControlCenterScreen}  
+                options={{
+                    tabBarIcon: ({focused}) => (
+                        <View 
                             style={{
-                                width:24,
-                                height:24,
-                                tintColor: focused ? "#01D167" : "#DDD",
+                                alignItems:'center',
+                                justifyContent:'center',
                             }}
-                        />
-                        <Text style={{fontSize:9, color: focused ? "#01D167" : "#DDD",}}>Debit Card</Text>
+                        >
+                            <Image
+                                source={require("../assets/pay.png")}
+                                resizeMode='contain'
+                                style={{
+                                    width:24,
+                                    height:24,
+                                    tintColor: focused ? "#01D167" : "#DDD",
+                                }}
+                            />
+                            <Text style={{fontSize:9, color: focused ? "#01D167" : "#DDD",}}>Debit Card</Text>
                         {/* These elements will always be set to gray since they are not supposed to be focused as per the shared SR Doc */}
-                    </View>
-                )
-            }}/>
-            <Tab.Screen name="Payments" component={SpendingLimitScreen}  options={{
+                        </View>
+                    ),
+                }}
+            />
+            <Tab.Screen name="Payments" component={DebitCardControlCenterScreen}  options={{
                 tabBarIcon: ({focused}) => (
                     <View 
                         style={{
@@ -90,10 +99,10 @@ const Tabs = () => {
                             style={{
                                 width:24,
                                 height:24,
-                                tintColor: focused ? "#01D167" : "#DDD",
+                                tintColor: "#DDDDDD",
                             }}
                         />
-                        <Text style={{fontSize:9, color: focused ? "#01D167" : "#DDD"}}>Payments</Text>
+                        <Text style={{fontSize:9, color: "#DDDDDD"}}>Payments</Text>
                         {/* These elements will always be set to gray since they are not supposed to be focused as per the shared SR Doc */}
                     </View>
                 )
