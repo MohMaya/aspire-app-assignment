@@ -3,16 +3,18 @@ import { StyleSheet, View, SafeAreaView, Image, Dimensions } from 'react-native'
 import { Text } from 'react-native-elements';
 import tw from 'tailwind-react-native-classnames';
 // import popUpCards from '../components/popUpCard';
-import { useDispatch } from 'react-redux';
-import { setDestination, setOrigin } from '../store/slices/navSlice';
+// import { useDispatch } from 'react-redux';
 import PopUpCard from '../components/PopUpCard';
+import { selectAvailableBalance, selectCurrencyUnits } from '../store/slices/navSlice';
+import { useNavigationState } from '@react-navigation/core';
 
 const {width, height} = Dimensions.get('screen');
 
+
 const DebitCardControlCenterScreen = () => {
-    const dispatch = useDispatch();
-    let currency = "S$"
-    let availableBalance = "3,000"
+    // const dispatch = useDispatch();
+    let currency = "S$";
+    let availableBalance = "3000";
     return (
         <SafeAreaView style={styles.background}>
             <View style={tw `p-0`}>
@@ -47,7 +49,7 @@ const DebitCardControlCenterScreen = () => {
     )
 }
 
-export default DebitCardControlCenterScreen
+export default DebitCardControlCenterScreen;
 
 const styles = StyleSheet.create({
     container: {
