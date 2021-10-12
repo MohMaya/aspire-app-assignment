@@ -91,20 +91,15 @@ const MenuItems = props => {
     const loadMenuItem = (menuKey) => {
         switch(menuKey) {
             case "MenuItem#1":
-                console.log("Top-Up Account Selected");
                 break;
             case "MenuItem#2":
-                console.log("Weekly spending limit Selected");
-                props.props.props.navigation.navigate('SpendingLimit');
+                props.props.props.navigation.push('SpendingLimit');
                 break;
             case "MenuItem#3":
-                console.log("Freeze card Selected");
                 break;
             case "MenuItem#4":
-                console.log("Get a new card Selected");
                 break;
             case "MenuItem#5":
-                console.log("Deactivated cards Selected");
                 break;
             default:
                 //Do Nothing

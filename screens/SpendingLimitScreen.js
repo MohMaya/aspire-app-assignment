@@ -4,7 +4,8 @@ import { Button, Icon } from 'react-native-elements'
 import tw from 'tailwind-react-native-classnames'
 import SpendingLimitBottomComponent from '../components/SpendingLimitBottomComponent'
 
-const SpendingLimitScreen = () => {
+const SpendingLimitScreen = (props) => {
+    
     return (
         <SafeAreaView style={styles.background}>
             <View style={tw `p-0`}>
@@ -12,7 +13,7 @@ const SpendingLimitScreen = () => {
                     <View style={styles.container}>
                         <TouchableOpacity
                             onPress={() => {
-                                console.log("Back Button Tapped");
+                                props.navigation.pop();
                             }}
                         >
                             <Image
