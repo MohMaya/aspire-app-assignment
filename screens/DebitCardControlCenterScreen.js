@@ -1,20 +1,58 @@
-import React from 'react'
+import React, { Component, useEffect } from 'react'
 import { StyleSheet, View, SafeAreaView, Image, Dimensions } from 'react-native'
 import { Text } from 'react-native-elements';
 import tw from 'tailwind-react-native-classnames';
 // import popUpCards from '../components/popUpCard';
 // import { useDispatch } from 'react-redux';
 import PopUpCard from '../components/PopUpCard';
-import { selectAvailableBalance, selectCurrencyUnits } from '../store/slices/navSlice';
+import { setCompleteCardDetails } from '../store/slices/debitCardSlice';
 import { useNavigationState } from '@react-navigation/core';
+import { useDispatch, useStore } from 'react-redux';
 
 const {width, height} = Dimensions.get('screen');
-
+let firstLoad_FLAG = true;
 
 const DebitCardControlCenterScreen = (props) => {
     // const dispatch = useDispatch();
-    let currency = "S$";
-    let availableBalance = "3000";
+    // const [currency, setCurrencyUnits] = useState();
+    // const [availableBalance, setAvailableBalance] = useState();
+    const store = useStore();
+    const forceUpdate = React.useReducer(() => ({}))[1]
+    const dispatch = useDispatch();
+    let state = store.getState()
+    let currency = state.debitCard.currencyUnits //selectCurrencyUnits();//"S$";
+    let availableBalance = state.debitCard.availableBalance
+
+    useEffect(() => {
+        console.log("Use-effect trigerred, firstLoad : "+firstLoad_FLAG)
+        if(firstLoad_FLAG == true)
+        {
+            firstLoad_FLAG = false;
+            let dummyCardDetails = {
+                cardNumberVisible: false,
+                cardNumber: "1234567887654321",
+                cardValidThru: "12/20",
+                cardCVV: "456",
+                nameOnCard: "Rakesh seth",
+                availableBalance: "42000",
+                currencyUnits: "INR",
+                weeklySpendingLimit: null,
+                weeklySpendingLimitExhausted: null
+            }
+
+            dispatch(
+                setCompleteCardDetails(dummyCardDetails)
+            );
+
+            state = store.getState();
+            console.log(state);
+            currency = state.debitCard.currencyUnits //selectCurrencyUnits();//"S$";
+            availableBalance = state.debitCard.availableBalance 
+            console.log("Debit Card Control Screen Loaded - Currency : "+currency+" && availableBalance : "+availableBalance);
+            forceUpdate();
+        }
+    });
+    
     return (
         <SafeAreaView style={styles.background}>
             <View style={tw `p-0`}>

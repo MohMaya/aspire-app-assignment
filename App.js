@@ -5,9 +5,7 @@ import { Text } from 'react-native-elements';
 import { Provider } from 'react-redux';
 import { SafeAreaProvider } from 'react-native-safe-area-context';
 import { NavigationContainer } from '@react-navigation/native';
-import { createNativeStackNavigator } from '@react-navigation/native-stack';
 import { store } from './store/store';
-import Tabs from './navigation/Tabs';
 import NavStack from './navigation/NavStack';
 
 export default function App() {

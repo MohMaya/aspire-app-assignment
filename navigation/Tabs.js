@@ -2,7 +2,7 @@ import React from 'react';
 import { StyleSheet, Text, View, TouchableOpacity, Image } from 'react-native';
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 import DebitCardControlCenterScreen from '../screens/DebitCardControlCenterScreen';
-import { setCompleteCardDetails } from '../store/slices/navSlice';
+import { setCompleteCardDetails } from '../store/slices/debitCardSlice';
 import { useDispatch } from 'react-redux';
 
 

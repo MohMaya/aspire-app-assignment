@@ -1,8 +1,8 @@
 import { configureStore } from "@reduxjs/toolkit";
-import navReducer from "./slices/navSlice";
+import debitCardSliceReducer from "./slices/debitCardSlice";
 
 export const store = configureStore({
     reducer: {
-        nav: navReducer,
+        debitCard: debitCardSliceReducer,
     },
 });
