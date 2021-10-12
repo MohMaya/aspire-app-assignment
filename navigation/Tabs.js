@@ -36,7 +36,13 @@ const Tabs = () => {
             {/* Assigning all tabs to redirect to DebitControlCenterScreen since it is the only screen shared with us*/}
             <Tab.Screen 
                 name="Home" 
-                component={DebitCardControlCenterScreen} 
+                component={DebitCardControlCenterScreen}
+                listeners={{
+                    tabPress: e => {
+                        // Prevent default action since this item is disabled
+                        e.preventDefault();
+                    },
+                }}
                 options={{
                     tabBarIcon: ({focused}) => (
                         <View 
@@ -85,7 +91,14 @@ const Tabs = () => {
                     ),
                 }}
             />
-            <Tab.Screen name="Payments" component={DebitCardControlCenterScreen}  options={{
+            <Tab.Screen name="Payments" component={DebitCardControlCenterScreen}  
+            listeners={{
+                tabPress: e => {
+                    // Prevent default action since this item is disabled
+                    e.preventDefault();
+                },
+            }}
+            options={{
                 tabBarIcon: ({focused}) => (
                     <View 
                         style={{
@@ -107,7 +120,14 @@ const Tabs = () => {
                     </View>
                 )
             }}/>
-            <Tab.Screen name="Credit" component={DebitCardControlCenterScreen}  options={{
+            <Tab.Screen name="Credit" component={DebitCardControlCenterScreen}  
+            listeners={{
+                tabPress: e => {
+                    // Prevent default action since this item is disabled
+                    e.preventDefault();
+                },
+            }}
+            options={{
                 tabBarIcon: ({focused}) => (
                     <View 
                         style={{
@@ -128,7 +148,14 @@ const Tabs = () => {
                     </View>
                 )
             }}/>
-            <Tab.Screen name="Profile" component={DebitCardControlCenterScreen}  options={{
+            <Tab.Screen name="Profile" component={DebitCardControlCenterScreen}  
+            listeners={{
+                tabPress: e => {
+                    // Prevent default action since this item is disabled
+                    e.preventDefault();
+                },
+            }}
+            options={{
                 tabBarIcon: ({focused}) => (
                     <View 
                         style={{

@@ -57,6 +57,7 @@ const MenuItems = props => {
             menuSubtitle: "Deposit money to your account to use with card", // The subtitle of the menu Item
             iconAssetUri: require("../assets/insight.png"),                             // Uri for the icon
             buttonState: -1,                                                //A parameter that suggest about the radio button -1: Hidden; 0: Button inactive; 1: Button active 
+            itemEnabled: false,                                             //A Parameter that tells if the menu item is enabled, therefore touchable opacity behavior
         },
         {
             key: "MenuItem#2",                                              // A unique key to supress the warning and optimize changes
@@ -64,6 +65,7 @@ const MenuItems = props => {
             menuSubtitle: isSpendingLimitSet() ? "Your weekly spending limit is "+currencyUnits()+" "+spendingLimit() : "You haven't set any spending limit on card", // The subtitle of the menu Item
             iconAssetUri: require("../assets/Transfer-2.png"),                             // Uri for the icon
             buttonState: 1,                                                //A parameter that suggest about the radio button -1: Hidden; 0: Button inactive; 1: Button active
+            itemEnabled: true,                                             //A Parameter that tells if the menu item is enabled, therefore touchable opacity behavior
         },
         {
             key: "MenuItem#3",                                              // A unique key to supress the warning and optimize changes
@@ -71,6 +73,7 @@ const MenuItems = props => {
             menuSubtitle: "Your debit card is currently active", // The subtitle of the menu Item
             iconAssetUri: require("../assets/Transfer-3.png"),                             // Uri for the icon
             buttonState: 0,                                                //A parameter that suggest about the radio button -1: Hidden; 0: Button inactive; 1: Button active
+            itemEnabled: false,                                             //A Parameter that tells if the menu item is enabled, therefore touchable opacity behavior
         },
         {
             key: "MenuItem#4",                                              // A unique key to supress the warning and optimize changes
@@ -78,6 +81,7 @@ const MenuItems = props => {
             menuSubtitle: "This deactivates your current debit card", // The subtitle of the menu Item
             iconAssetUri: require("../assets/Transfer-1.png"),                             // Uri for the icon
             buttonState: -1,                                                //A parameter that suggest about the radio button -1: Hidden; 0: Button inactive; 1: Button active
+            itemEnabled: false,                                             //A Parameter that tells if the menu item is enabled, therefore touchable opacity behavior
         },
         {
             key: "MenuItem#5",                                              // A unique key to supress the warning and optimize changes
@@ -85,6 +89,7 @@ const MenuItems = props => {
             menuSubtitle: "Your previously deactivated cards", // The subtitle of the menu Item
             iconAssetUri: require("../assets/Transfer.png"),                             // Uri for the icon
             buttonState: -1,                                                //A parameter that suggest about the radio button -1: Hidden; 0: Button inactive; 1: Button active
+            itemEnabled: false,                                             //A Parameter that tells if the menu item is enabled, therefore touchable opacity behavior
         }
     ];
 
@@ -116,6 +121,7 @@ const MenuItems = props => {
                         onPress={() => {
                             loadMenuItem(item.key);
                         }}
+                        disabled={!(item.itemEnabled)}
                     >
                         <View style={styles.menuItem}>
                             <Image
