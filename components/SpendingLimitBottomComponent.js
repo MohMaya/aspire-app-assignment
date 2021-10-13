@@ -101,7 +101,7 @@ const SpendingLimitBottomComponent = () => {
                         titleStyle={{color:"#FFF", fontSize: 16}}
                         disabled={!(isSaveButtonActive)}
                         onPress={() => {
-                            console.log("Save Button Pressed");
+                            console.log("Save Button Pressed; "+number);
                         }}
                     />
                 </View>
