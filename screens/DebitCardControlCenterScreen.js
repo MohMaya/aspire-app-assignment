@@ -41,8 +41,6 @@ const DebitCardControlCenterScreen = (props) => {
         const response = await debitCardDetailsAPI.get('/cardDetails/'+userId)
         .then()
         .catch((error) => {
-            console.log(response);
-            console.log(error);
             setIndicatorDisplayed(false);
             return createOneButtonAlert("Error", "Error Encountered in fetching data");
             }
@@ -53,8 +51,6 @@ const DebitCardControlCenterScreen = (props) => {
             return;
         }
         else{
-            console.log("Response : ");
-            console.log(response);
             let tempCardDetails = response.data;
             if(tempCardDetails.cardNumber != null){
                 dispatch(
@@ -92,7 +88,7 @@ const DebitCardControlCenterScreen = (props) => {
             [
                 {
                 text: "OK",
-                onPress: () => console.log("OK Pressed"),
+                onPress: () => {},
                 }
             ]
     );
