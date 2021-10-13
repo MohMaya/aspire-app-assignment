@@ -17,13 +17,17 @@
       "**/*"
     ],
     "ios": {
-      "supportsTablet": false
+      "supportsTablet": false,
+      "bundleIdentifier": "com.Shivanshu.aspireApp",
+      "buildNumber": "1.0.0"
     },
     "android": {
       "adaptiveIcon": {
         "foregroundImage": "./assets/Logo@2x.png",
         "backgroundColor": "#0C365A"
-      }
+      },
+      "package": "com.Shivanshu.aspireApp",
+      "versionCode": 1
     },
     "web": {
       "favicon": "./assets/Logo@3x.png"
