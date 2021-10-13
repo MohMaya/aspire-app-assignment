@@ -27,88 +27,86 @@ const SpendingLimitBottomComponent = () => {
 
 
     return (
-        <SafeAreaView>
-            <View style={{height: height-153, backgroundColor:'#fff', borderTopLeftRadius: 24, borderTopRightRadius: 24, marginTop: 40}}>
-                <View style={{flexDirection: 'column', marginLeft: 24, marginRight: 24, flex: 1}}>
-                    <View style={{marginTop: 32, height: 122, flexDirection: 'column'}}>
-                        {/* View for Details and input */}
-                        <View style={{ marginTop: 0, height: 19, flexDirection: 'row'}}>
-                            {/* View for Heading and icon */}
-                            <Image
-                                style={{
-                                    width: 16,
-                                    height: 16,
-                                    resizeMode: "contain",
-                                    marginRight:0,
-                                }}
-                                source={require("../assets/pickup-car.png")}
-                            />
-                            <Text style={{fontSize: 13, fontWeight: '400', marginLeft:8}}>Set a weekly debit card spending limit</Text>
-                        </View>
-                        <View style={{marginTop: 13, height: 33, flexDirection: 'row', alignContent: 'flex-start'}}>
-                            {/* View for Input */}
-                            <View style={{backgroundColor:'#01D167', borderRadius: 3, width: 40, height: 24, alignItems:'center', justifyContent:'center'}}>
-                                {/* View of currency units */}
-                                <Text style={{color:'#fff', fontSize: 16, fontWeight: '700'}}>{currencyUnits}</Text>
-                            </View>
-                            <TextInput
-                                style={styles.input}
-                                onChangeText={onChangeNumberMiddle}
-                                value={number}
-                                placeholder="Amount"
-                                keyboardType="numeric"
-                            />
-                        </View>
-                        <View style={{backgroundColor:'#E5E5E5', height:0.5, marginTop: 5}}/>
-                        {/* Grey Bar */}
-                        <View style={{ marginBottom: 0, marginTop: 12.5, height: 40, maxWidth: 344, flexDirection: 'row', alignContent: 'flex-start'}}>
-                            {/* View for Note */}
-                            <Text style={{fontSize: 13, fontWeight: '300', color:'#22222266'}}>Here weekly means the last 7 days - not the calendar week</Text>
-                        </View>
+        <View style={{height: (4*height)/5, backgroundColor:'#fff', borderTopLeftRadius: 24, borderTopRightRadius: 24, marginTop: 0}}>
+            <View style={{flexDirection: 'column', marginLeft: 24, marginRight: 24, flex: 1}}>
+                <View style={{marginTop: 32, height: 122, flexDirection: 'column'}}>
+                    {/* View for Details and input */}
+                    <View style={{ marginTop: 0, height: 19, flexDirection: 'row'}}>
+                        {/* View for Heading and icon */}
+                        <Image
+                            style={{
+                                width: 16,
+                                height: 16,
+                                resizeMode: "contain",
+                                marginRight:0,
+                            }}
+                            source={require("../assets/pickup-car.png")}
+                        />
+                        <Text style={{fontSize: 13, fontWeight: '400', marginLeft:8}}>Set a weekly debit card spending limit</Text>
                     </View>
-                    <View style={{marginTop: 25, height: 40, flexDirection: 'row'}}>
-                        {/* View for Preset Buttons */}
-                        <Button
-                            title={currencyUnits+" "+presetValues[0]}
-                            buttonStyle={{...styles.customButton, marginRight: 12}}
-                            titleStyle={styles.buttonTitle}
-                            onPress={() => {
-                                onChangeNumberMiddle(''+presetValues[0]);
-                            }}
-                        />
-                        <Button
-                            title={currencyUnits+" "+presetValues[1]}
-                            buttonStyle={{...styles.customButton, marginRight: 12}}
-                            titleStyle={styles.buttonTitle}
-                            onPress={() => {
-                                onChangeNumberMiddle(''+presetValues[1]);
-                            }}
-                        />
-                        <Button
-                            title={currencyUnits+" "+presetValues[2]}
-                            buttonStyle={{...styles.customButton, marginRight: 12}}
-                            titleStyle={styles.buttonTitle}
-                            onPress={() => {
-                                onChangeNumberMiddle(''+presetValues[2]);
-                            }}
+                    <View style={{marginTop: 13, height: 33, flexDirection: 'row', alignContent: 'flex-start'}}>
+                        {/* View for Input */}
+                        <View style={{backgroundColor:'#01D167', borderRadius: 3, width: 40, height: 24, alignItems:'center', justifyContent:'center'}}>
+                            {/* View of currency units */}
+                            <Text style={{color:'#fff', fontSize: 16, fontWeight: '700'}}>{currencyUnits}</Text>
+                        </View>
+                        <TextInput
+                            style={styles.input}
+                            onChangeText={onChangeNumberMiddle}
+                            value={number}
+                            placeholder="Amount"
+                            keyboardType="numeric"
                         />
                     </View>
-                    <View style={{flex:1, marginBottom: 30, height: 56}}>
-                        {/* View for Save Button */}
-                        <View style={{flex:1}}>{/* A Blank View put up as a spacer */}</View>
-                        <Button
-                            title={"Save"}
-                            buttonStyle={styles.saveButtonActive}
-                            titleStyle={{color:"#FFF", fontSize: 16}}
-                            disabled={!(isSaveButtonActive)}
-                            onPress={() => {
-                                console.log("Save Button Pressed");
-                            }}
-                        />
+                    <View style={{backgroundColor:'#E5E5E5', height:0.5, marginTop: 5}}/>
+                    {/* Grey Bar */}
+                    <View style={{ marginBottom: 0, marginTop: 12.5, height: 40, maxWidth: 344, flexDirection: 'row', alignContent: 'flex-start'}}>
+                        {/* View for Note */}
+                        <Text style={{fontSize: 13, fontWeight: '300', color:'#22222266'}}>Here weekly means the last 7 days - not the calendar week</Text>
                     </View>
                 </View>
+                <View style={{marginTop: 25, height: 40, flexDirection: 'row'}}>
+                    {/* View for Preset Buttons */}
+                    <Button
+                        title={currencyUnits+" "+presetValues[0]}
+                        buttonStyle={{...styles.customButton, marginRight: 12}}
+                        titleStyle={styles.buttonTitle}
+                        onPress={() => {
+                            onChangeNumberMiddle(''+presetValues[0]);
+                        }}
+                    />
+                    <Button
+                        title={currencyUnits+" "+presetValues[1]}
+                        buttonStyle={{...styles.customButton, marginRight: 12}}
+                        titleStyle={styles.buttonTitle}
+                        onPress={() => {
+                            onChangeNumberMiddle(''+presetValues[1]);
+                        }}
+                    />
+                    <Button
+                        title={currencyUnits+" "+presetValues[2]}
+                        buttonStyle={{...styles.customButton, marginRight: 12}}
+                        titleStyle={styles.buttonTitle}
+                        onPress={() => {
+                            onChangeNumberMiddle(''+presetValues[2]);
+                        }}
+                    />
+                </View>
+                <View style={{flex:1, marginBottom: 30, height: 56}}>
+                    {/* View for Save Button */}
+                    <View style={{flex:1}}>{/* A Blank View put up as a spacer */}</View>
+                    <Button
+                        title={"Save"}
+                        buttonStyle={styles.saveButtonActive}
+                        titleStyle={{color:"#FFF", fontSize: 16}}
+                        disabled={!(isSaveButtonActive)}
+                        onPress={() => {
+                            console.log("Save Button Pressed");
+                        }}
+                    />
+                </View>
             </View>
-        </SafeAreaView>
+        </View>
     )
 }
 
