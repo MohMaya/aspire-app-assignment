@@ -1,4 +1,4 @@
-import React, { useEffect, useRef } from 'react'
+import React, { useEffect } from 'react'
 import { StyleSheet, Text, View, Dimensions, Image } from 'react-native'
 import { Button } from 'react-native-elements';
 import { useDispatch, useSelector, useStore } from 'react-redux';
@@ -53,8 +53,7 @@ const CardView = () => {
     const store = useStore();
     let state = store.getState()
     const dispatch = useDispatch();
-    const cardViewRef = useRef(null);
-
+    
     let cardDetailsDisplayed = useSelector(selectCardNumberVisible);//selectCardNumberVisible;
     let cardNumber = useSelector(selectCardNumber);//selectCardNumber;
     let cardValidThru = useSelector(selectCardValidThru);//selectCardValidThru;
@@ -72,7 +71,7 @@ const CardView = () => {
     // }, [cardDetailsDisplayed]);
 
     return (
-        <View ref={cardViewRef} style={{backgroundColor: 'transparent', width: CARD_WIDTH, height: CARD_HEIGHT+32, marginTop: -90}}>
+        <View style={{backgroundColor: 'transparent', width: CARD_WIDTH, height: CARD_HEIGHT+32, marginTop: -90}}>
             {/* A view for the card image : Width is calculated as a percentage of the screen width as per shared design, height is calculated such as to maintain the aspect ratio */}
             <View style={{backgroundColor: 'white', alignSelf:'flex-end', width: 151, height: 45, borderTopRightRadius: 6, borderTopLeftRadius: 6}}>
                 {/* A view for the "Show Card Number Button" */}

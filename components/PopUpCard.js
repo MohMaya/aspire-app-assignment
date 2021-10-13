@@ -55,6 +55,7 @@ const PopUpCard = (props) => {
     let spendingLimitExhausted = useSelector(selectWeeklySpendingLimitExhausted);
     let currencyUnits = useSelector(selectCurrencyUnits);
     let isSpendingLimitSet = (spendingLimit != null);
+    let scrollheight = isSpendingLimitSet ? 580 : 540;
     // let cardNumberForDisplay = () => {
     //     if(cardDetailsDisplayed()){
     //         return cardNumber()
@@ -80,10 +81,10 @@ const PopUpCard = (props) => {
                 <View style={{backgroundColor:'transparent', flex: 1, height: 243}}>
                     {/* A view that stays transparent */}
                 </View>
-                <View style={{backgroundColor: 'white', alignItems: 'center', height: height-243, borderRadius: 18, shadowOpacity: 0.5}}>
+                <View style={{backgroundColor: 'white', alignItems: 'center', height: scrollheight, borderRadius: 18, shadowOpacity: 0.5}}>
                     {/* The view that scrolls up if needed */}
                     <CardView />
-                    <View style={{height: height-243-CARD_HEIGHT-32, marginTop: 26, marginBottom: 30, marginLeft: 24, marginRight: 24, width: width-48}}>
+                    <View style={{height: scrollheight, marginTop: 26, marginBottom: 30, marginLeft: 24, marginRight: 24, width: width-48}}>
                         {/* Menu Options to be displayed here */}
                         {renderSpendingLimitBar(isSpendingLimitSet, spendingLimitExhausted, spendingLimit, currencyUnits)}
                         <MenuItems props={props}/>
