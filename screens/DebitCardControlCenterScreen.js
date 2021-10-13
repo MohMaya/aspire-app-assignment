@@ -6,6 +6,7 @@ import tw from 'tailwind-react-native-classnames';
 // import { useDispatch } from 'react-redux';
 import PopUpCard from '../components/PopUpCard';
 import { selectAvailableBalance, selectCurrencyUnits, setCompleteCardDetails } from '../store/slices/debitCardSlice';
+import { setUserId } from '../store/slices/userSlice';
 import { useNavigationState } from '@react-navigation/core';
 import { useDispatch, useSelector, useStore } from 'react-redux';
 import debitCardDetailsAPI from '../api/debitCardDetailsAPI';
@@ -31,7 +32,7 @@ const DebitCardControlCenterScreen = (props) => {
     let availableBalance = useSelector(selectAvailableBalance);
 
     const [cardDetails, setCardDetails] = useState([]);
-    const [indicatorDisplayed, setIndicatorDisplayed] = useState(true)
+    const [indicatorDisplayed, setIndicatorDisplayed] = useState(false)
 
     const cardDetailsApi = async (userId) => {
         if(userId == null){
@@ -68,37 +69,13 @@ const DebitCardControlCenterScreen = (props) => {
     }
 
     const fetchRandomCardDetails = () => {
-        // let tempInitialCard = [
-        //     {
-        //         "availableBalance" : 420000,
-        //         "cardCVV" : "000",
-        //         "cardNumber" : 12345678912345678,
-        //         "cardNumberVisible" : false,
-        //         "cardValidThru" : "12/30",
-        //         "currencyUnits" : "INR",
-        //         "nameOnCard" : "Shivanshu Chaudhary",
-        //         "weeklySpendingLimit": -1,
-        //         "weeklySpendingLimitExhausted": -1
-        //     },
-        //     {
-        //         "cardNumberVisible": false,
-        //         "cardNumber": "1234567800000001",
-        //         "cardValidThru": "01/25",
-        //         "cardCVV": "001",
-        //         "nameOnCard": "Tony Stark",
-        //         "availableBalance": 97000000,
-        //         "currencyUnits": "USD",
-        //         "weeklySpendingLimit": 10000,
-        //         "weeklySpendingLimitExhausted": 3000
-        //     }
-        // ]
-        // let randomIdx = Math.floor(Math.random() * tempInitialCard.length);
-        // dispatch(
-        //     setCompleteCardDetails(tempInitialCard[randomIdx])
-        // );
-        
         
         let randomIdx = Math.floor(Math.random() * dummyUserIDsList.length);
+        dispatch(
+            setUserId({
+                userId: dummyUserIDsList[randomIdx],
+            })
+        )
         setIndicatorDisplayed(true);
         cardDetailsApi(dummyUserIDsList[randomIdx]);
     }
@@ -195,7 +172,7 @@ const styles = StyleSheet.create({
         height: height,
         top: 0,
         backgroundColor: 'white',
-    } ,
+    },
     loadingOverlay:{
         height:height, 
         width:width, 

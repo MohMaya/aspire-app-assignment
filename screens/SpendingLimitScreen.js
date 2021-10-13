@@ -44,7 +44,7 @@ const SpendingLimitScreen = (props) => {
                     </View>
                     <Text style={{color:'white', fontWeight:'bold', fontSize:24, flex: 1, height: 33}}>Spending limit</Text>
                 </View>
-                <SpendingLimitBottomComponent />
+                <SpendingLimitBottomComponent props={props}/>
             </View>
         </SafeAreaView>
     )

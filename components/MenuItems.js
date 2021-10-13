@@ -1,8 +1,10 @@
 import React from 'react'
-import { Image, StyleSheet, Text, View, TouchableOpacity } from 'react-native'
+import { Image, StyleSheet, Text, View, TouchableOpacity, Alert } from 'react-native'
 import { FlatList } from 'react-native';
 import { useDispatch, useSelector } from 'react-redux';
-import { selectCurrencyUnits, selectWeeklySpendingLimit, setWeeklySpendingLimit } from '../store/slices/debitCardSlice';
+import { selectCardNumber, selectCurrencyUnits, selectWeeklySpendingLimit, setWeeklySpendingLimit, setWeeklySpendingLimitExhausted } from '../store/slices/debitCardSlice';
+import { selectUserId } from '../store/slices/userSlice';
+import debitCardDetailsAPI from '../api/debitCardDetailsAPI';
 
 
 const renderButton = (buttonState) => {
@@ -46,12 +48,27 @@ const renderButton = (buttonState) => {
     }
 }
 
+const createOneButtonAlert = (title, message) =>
+        Alert.alert(
+            title,
+            message,
+            [
+                {
+                text: "Go back.",
+                onPress: () => {},
+                }
+            ]
+    );
+
+
 
 const MenuItems = props => {
     let spendingLimit = useSelector(selectWeeklySpendingLimit);
     let currencyUnits = useSelector(selectCurrencyUnits);
+    let cardNumber = useSelector(selectCardNumber);
+    let userId = useSelector(selectUserId);
     let isSpendingLimitSet = (spendingLimit != null && spendingLimit > 0);
-    const dispatch = useDispatch();
+    const dispatchEvent = useDispatch();
 
     let menuArr = [
         {
@@ -96,6 +113,53 @@ const MenuItems = props => {
         }
     ];
 
+    const removeSpendingLimitApi = async () => {
+        
+        const params = {
+            userId: userId, //User ID for which Spending limit is being set
+            cardNumber: cardNumber ,    //Card Number for which the Spending Limit is being set
+        }
+    
+        //MARK: this line is used to contact one of the two mocked dumb APIs that return either success(90%) or failure(10%) in changing the limit
+        let randomizedSucessfulApi = (Math.floor(Math.random() * 100) < 10) ? "/removeSpendingLimitf" : "/removeSpendingLimits";
+        console.log("API CALL : "+randomizedSucessfulApi);
+        console.log(params);
+    
+        const response = debitCardDetailsAPI.post(randomizedSucessfulApi, params)
+        .then(response => {
+            // Response is designed to be in the form of 
+            // For: setSpendingLimitf -> {success: "false", reason: "You are not allowed to remove spending limit. Contact your administrator", limitExhausted: -1}    //The setting/removal failed at backend due to a restriction by card manager
+            // For: setSpendingLimits -> {success: "true", reason: "", limitExhausted: <numericalValue>} //Limit set successfully
+            // setIndicatorDisplayed(false);
+            if(response.status != 200){
+                return createOneButtonAlert("Error", "Error Encountered in Removing Spending Limit");
+            }
+            else{
+                console.log(response.data);
+                if(response.data.success != null){
+                    if(response.data.success == "true"){
+                        dispatchEvent(setWeeklySpendingLimit({
+                            weeklySpendingLimit: -1,
+                        }));
+                        dispatchEvent(setWeeklySpendingLimitExhausted({
+                            weeklySpendingLimitExhausted: -1,
+                        }));
+                    }
+                    else if(response.data.success == "false" && response.data.reason != null && response.data.reason != ""){
+                        return createOneButtonAlert("Error", response.data.reason);
+                    }
+                }
+            }
+        })
+        .catch((error) => {
+            console.log(response);
+            console.log(error);
+            // setIndicatorDisplayed(false);
+            return createOneButtonAlert("Error", "Error Encountered in Removing Spending Limit");
+        });
+        
+    }
+
     const loadMenuItem = (menuKey, buttonState) => {
         switch(menuKey) {
             case "MenuItem#1":
@@ -107,9 +171,7 @@ const MenuItems = props => {
                 }
                 else if(buttonState == 1){
                     //i.e. The Spending limit is already set, unset it
-                    dispatch(setWeeklySpendingLimit({
-                        weeklySpendingLimit: null,
-                    }))
+                    removeSpendingLimitApi();
                 }
                 
                 break;
