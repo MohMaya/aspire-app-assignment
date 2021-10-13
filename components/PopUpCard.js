@@ -2,9 +2,10 @@ import React from 'react'
 import { StyleSheet, Text, View, Dimensions, ScrollView } from 'react-native'
 import { LinearProgress } from 'react-native-elements';
 import { SafeAreaView } from 'react-native-safe-area-context';
-import { useStore } from 'react-redux';
+import { useSelector, useStore } from 'react-redux';
 import MenuItems from './MenuItems';
 import CardView from './CardView';
+import { selectCurrencyUnits, selectWeeklySpendingLimit, selectWeeklySpendingLimitExhausted } from '../store/slices/debitCardSlice';
 
 const {width, height} = Dimensions.get('screen');
 
@@ -16,7 +17,6 @@ const POP_UP_HEIGHT = (height >= 844) ? 0.73*height : 0.66*height;
 
 
 const renderSpendingLimitBar = (renderFlag, limitExhausted, totalLimit, currencyUnits) => {
-    console.log("render spending limit : "+renderFlag)
     if(renderFlag === true){
         return (
             <View style={{height: 39}}>
@@ -51,10 +51,10 @@ const PopUpCard = (props) => {
     const store = useStore();
     let state = store.getState()
 
-    let spendingLimit = state.debitCard.weeklySpendingLimit;
-    let spendingLimitExhausted = state.debitCard.weeklySpendingLimitExhausted;
-    let currencyUnits = state.debitCard.currencyUnits;
-    let isSpendingLimitSet = (state.debitCard.weeklySpendingLimit != null) ? true : false;
+    let spendingLimit = useSelector(selectWeeklySpendingLimit);
+    let spendingLimitExhausted = useSelector(selectWeeklySpendingLimitExhausted);
+    let currencyUnits = useSelector(selectCurrencyUnits);
+    let isSpendingLimitSet = (spendingLimit != null);
     // let cardNumberForDisplay = () => {
     //     if(cardDetailsDisplayed()){
     //         return cardNumber()

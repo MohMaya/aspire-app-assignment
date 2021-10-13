@@ -1,6 +1,8 @@
 import React from 'react'
 import { Image, StyleSheet, Text, View, TouchableOpacity } from 'react-native'
 import { FlatList } from 'react-native';
+import { useDispatch, useSelector } from 'react-redux';
+import { selectCurrencyUnits, selectWeeklySpendingLimit, setWeeklySpendingLimit } from '../store/slices/debitCardSlice';
 
 
 const renderButton = (buttonState) => {
@@ -46,9 +48,10 @@ const renderButton = (buttonState) => {
 
 
 const MenuItems = props => {
-    let spendingLimit = () => 5000;
-    let currencyUnits = () => "S$";
-    let isSpendingLimitSet = () => true;
+    let spendingLimit = useSelector(selectWeeklySpendingLimit);
+    let currencyUnits = useSelector(selectCurrencyUnits);
+    let isSpendingLimitSet = (spendingLimit != null);
+    const dispatch = useDispatch();
 
     let menuArr = [
         {
@@ -62,9 +65,9 @@ const MenuItems = props => {
         {
             key: "MenuItem#2",                                              // A unique key to supress the warning and optimize changes
             menuTitle: "Weekly spending limit",                                    // The Title of the menu Item
-            menuSubtitle: isSpendingLimitSet() ? "Your weekly spending limit is "+currencyUnits()+" "+spendingLimit() : "You haven't set any spending limit on card", // The subtitle of the menu Item
+            menuSubtitle: isSpendingLimitSet ? "Your weekly spending limit is "+currencyUnits+" "+spendingLimit : "You haven't set any spending limit on card", // The subtitle of the menu Item
             iconAssetUri: require("../assets/Transfer-2.png"),                             // Uri for the icon
-            buttonState: 1,                                                //A parameter that suggest about the radio button -1: Hidden; 0: Button inactive; 1: Button active
+            buttonState: isSpendingLimitSet ? 1 : 0,                                                //A parameter that suggest about the radio button -1: Hidden; 0: Button inactive; 1: Button active
             itemEnabled: true,                                             //A Parameter that tells if the menu item is enabled, therefore touchable opacity behavior
         },
         {
@@ -93,12 +96,22 @@ const MenuItems = props => {
         }
     ];
 
-    const loadMenuItem = (menuKey) => {
+    const loadMenuItem = (menuKey, buttonState) => {
         switch(menuKey) {
             case "MenuItem#1":
                 break;
             case "MenuItem#2":
-                props.props.props.navigation.push('SpendingLimit');
+                if(buttonState == 0){
+                    //i.e. The Spending limit is not set ->  Open the Spending Limits screen
+                    props.props.props.navigation.push('SpendingLimit');
+                }
+                else if(buttonState == 1){
+                    //i.e. The Spending limit is already set, unset it
+                    dispatch(setWeeklySpendingLimit({
+                        weeklySpendingLimit: null,
+                    }))
+                }
+                
                 break;
             case "MenuItem#3":
                 break;
@@ -119,7 +132,7 @@ const MenuItems = props => {
                 return (
                     <TouchableOpacity
                         onPress={() => {
-                            loadMenuItem(item.key);
+                            loadMenuItem(item.key, item.buttonState);
                         }}
                         disabled={!(item.itemEnabled)}
                     >

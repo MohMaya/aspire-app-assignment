@@ -1,8 +1,8 @@
-import React from 'react'
+import React, { useEffect, useRef } from 'react'
 import { StyleSheet, Text, View, Dimensions, Image } from 'react-native'
 import { Button } from 'react-native-elements';
-import { useDispatch, useStore } from 'react-redux';
-import { setCardNumberVisible } from '../store/slices/debitCardSlice';
+import { useDispatch, useSelector, useStore } from 'react-redux';
+import { selectCardCVV, selectCardNumber, selectCardNumberVisible, selectCardValidThru, selectNameOnCard, setCardNumberVisible } from '../store/slices/debitCardSlice';
 
 const {width, height} = Dimensions.get('screen');
 
@@ -10,7 +10,6 @@ const CARD_WIDTH = (width-48);  //Ensures that the currency notation and the car
 const CARD_HEIGHT = 0.6*CARD_WIDTH; // Aspect Ratio of the card is 0.6 [h/w]
 
 const cardNumberDisplayRender = (cardDisplayFlag, cardNumber) => {
-    console.log("CNDISREN : flag : "+cardDisplayFlag);
     if(!(cardDisplayFlag != null && cardNumber != null)){
         return (<View style={{display: 'none'}}/>);
     }
@@ -26,25 +25,25 @@ const cardNumberDisplayRender = (cardDisplayFlag, cardNumber) => {
     else{
         return (
             <View style={{flexDirection: 'row'}}>
-                <View style={{marginLeft: -4, flexDirection: 'row'}}>
+                <View style={{marginLeft: -4, flexDirection: 'row', width: 50}}>
                     <View style={styles.bullets}></View>
                     <View style={styles.bullets}></View>
                     <View style={styles.bullets}></View>
                     <View style={styles.bullets}></View>
                 </View>
-                <View style={{marginLeft: 20, flexDirection: 'row'}}>
+                <View style={{marginLeft: 20, flexDirection: 'row', width: 50}}>
                     <View style={styles.bullets}></View>
                     <View style={styles.bullets}></View>
                     <View style={styles.bullets}></View>
                     <View style={styles.bullets}></View>
                 </View>
-                <View style={{marginLeft: 20, flexDirection: 'row'}}>
-                <View style={styles.bullets}></View>
+                <View style={{marginLeft: 20, flexDirection: 'row', marginRight: 20, width: 50}}>
+                    <View style={styles.bullets}></View>
                     <View style={styles.bullets}></View>
                     <View style={styles.bullets}></View>
                     <View style={styles.bullets}></View>
                 </View>
-                <Text style={{color:'white', fontWeight:'400', fontSize:16, marginLeft: 20}}>{cardNumber.substring(0,4)}</Text>
+                <Text style={{color:'white', fontWeight:'500', fontSize:16, width: 50, letterSpacing: 2}}>{cardNumber.substring(12,16)}</Text>
             </View>
         );
     }
@@ -54,17 +53,26 @@ const CardView = () => {
     const store = useStore();
     let state = store.getState()
     const dispatch = useDispatch();
-    const forceUpdate = React.useReducer(() => ({}))[1]
+    const cardViewRef = useRef(null);
+
+    let cardDetailsDisplayed = useSelector(selectCardNumberVisible);//selectCardNumberVisible;
+    let cardNumber = useSelector(selectCardNumber);//selectCardNumber;
+    let cardValidThru = useSelector(selectCardValidThru);//selectCardValidThru;
+    let cardCVV = useSelector(selectCardCVV);//selectCardCVV;
+    let nameOnCard = useSelector(selectNameOnCard);//selectNameOnCard;
     
-    let cardDetailsDisplayed = state.debitCard.cardNumberVisible;//selectCardNumberVisible;
-    let cardNumber = state.debitCard.cardNumber;//selectCardNumber;
-    let cardValidThru = state.debitCard.cardValidThru;//selectCardValidThru;
-    let cardCVV = state.debitCard.cardCVV;//selectCardCVV;
-    let nameOnCard = state.debitCard.nameOnCard;//selectNameOnCard;
-    
+    // useEffect(() => {
+    //     console.log("Use Effect Trigerred for cardview");
+    //     if(cardDetailsDisplayed == null || cardNumber == null || cardValidThru == null || cardCVV == null || nameOnCard == null){
+    //         return;//No Changes if any of the values are null
+    //     }
+    //     else{
+    //         // cardViewRef.current;
+    //     }
+    // }, [cardDetailsDisplayed]);
 
     return (
-        <View style={{backgroundColor: 'transparent', width: CARD_WIDTH, height: CARD_HEIGHT+32, marginTop: -90}}>
+        <View ref={cardViewRef} style={{backgroundColor: 'transparent', width: CARD_WIDTH, height: CARD_HEIGHT+32, marginTop: -90}}>
             {/* A view for the card image : Width is calculated as a percentage of the screen width as per shared design, height is calculated such as to maintain the aspect ratio */}
             <View style={{backgroundColor: 'white', alignSelf:'flex-end', width: 151, height: 45, borderTopRightRadius: 6, borderTopLeftRadius: 6}}>
                 {/* A view for the "Show Card Number Button" */}
@@ -84,18 +92,17 @@ const CardView = () => {
                         />
                     }
                     onPress={() => {
-                        console.log("Card Details Displayed = "+cardDetailsDisplayed)
                         if(cardDetailsDisplayed){
                             dispatch(setCardNumberVisible({
                                 cardNumberVisible: false,
                             }));
-                            forceUpdate();
+                            // forceUpdate();
                         }
                         else{
                             dispatch(setCardNumberVisible({
                                 cardNumberVisible: true,
                             }));
-                            forceUpdate();
+                            // forceUpdate();
                         }
                     }}
                 />
