@@ -1,5 +1,5 @@
-import React, { Component, useEffect } from 'react'
-import { StyleSheet, View, SafeAreaView, Image, Dimensions } from 'react-native'
+import React, { Component, useEffect, useState } from 'react'
+import { StyleSheet, View, SafeAreaView, Image, Dimensions, ActivityIndicator, Alert } from 'react-native'
 import { Text, FAB } from 'react-native-elements';
 import tw from 'tailwind-react-native-classnames';
 // import popUpCards from '../components/popUpCard';
@@ -8,9 +8,20 @@ import PopUpCard from '../components/PopUpCard';
 import { selectAvailableBalance, selectCurrencyUnits, setCompleteCardDetails } from '../store/slices/debitCardSlice';
 import { useNavigationState } from '@react-navigation/core';
 import { useDispatch, useSelector, useStore } from 'react-redux';
+import debitCardDetailsAPI from '../api/debitCardDetailsAPI';
 
 const {width, height} = Dimensions.get('screen');
 let firstLoad_FLAG = true;
+
+let dummyUserIDsList = [
+                            "ee7bb6a818df311024b3a6e705e55945",
+                            "e9ac92ba8f8223309904c773483e0b35",
+                            "d32b8789f913925cb3b7d491a59e19fc",
+                            "58a0723973209d6475b2b32e32ee8e7d",
+                            "46f7b46f7f6552c36e1a61f59bfb79c6",
+                            "4a9f64cbecd5b7bd5f7a7ce8b70a59ed",
+                            "226358da2235a5097e45f13b3eb35213"
+                        ]
 
 const DebitCardControlCenterScreen = (props) => {
     const store = useStore();
@@ -19,96 +30,95 @@ const DebitCardControlCenterScreen = (props) => {
     let currency = useSelector(selectCurrencyUnits);
     let availableBalance = useSelector(selectAvailableBalance);
 
+    const [cardDetails, setCardDetails] = useState([]);
+    const [indicatorDisplayed, setIndicatorDisplayed] = useState(true)
 
-    const setRandomCardDetails = () => {
-        let dummyCardDetails = [
-            {
-                cardNumberVisible: false,
-                cardNumber: "12345678912345678",
-                cardValidThru: "12/30",
-                cardCVV: "000",
-                nameOnCard: "Shivanshu Chaudhary",
-                availableBalance: "420,000",
-                currencyUnits: "INR",
-                weeklySpendingLimit: null,
-                weeklySpendingLimitExhausted: null
-            },
-            {
-                cardNumberVisible: false,
-                cardNumber: "1234567800000001",
-                cardValidThru: "01/25",
-                cardCVV: "001",
-                nameOnCard: "Tony Stark",
-                availableBalance: "97,000,000",
-                currencyUnits: "USD",
-                weeklySpendingLimit: 10000,
-                weeklySpendingLimitExhausted: 3000
-            },
-            {
-                cardNumberVisible: false,
-                cardNumber: "1234567887654321",
-                cardValidThru: "03/24",
-                cardCVV: "013",
-                nameOnCard: "Bruce Banner",
-                availableBalance: "13,000",
-                currencyUnits: "BRL",
-                weeklySpendingLimit: 500,
-                weeklySpendingLimitExhausted: 40
-            },
-            {
-                cardNumberVisible: false,
-                cardNumber: "1234567843218765",
-                cardValidThru: "06/44",
-                cardCVV: "007",
-                nameOnCard: "Natasha Romanoff",
-                availableBalance: "42,000",
-                currencyUnits: "RUB",
-                weeklySpendingLimit: null,
-                weeklySpendingLimitExhausted: null
-            },
-            {
-                cardNumberVisible: false,
-                cardNumber: "1234567887651234",
-                cardValidThru: "09/34",
-                cardCVV: "420",
-                nameOnCard: "Peter Parker",
-                availableBalance: "84,000",
-                currencyUnits: "USD",
-                weeklySpendingLimit: 4000,
-                weeklySpendingLimitExhausted: 400
-            },
-            {
-                cardNumberVisible: false,
-                cardNumber: "1234567812345678",
-                cardValidThru: "10/28",
-                cardCVV: "666",
-                nameOnCard: "T'Challa",
-                availableBalance: "1,000,000",
-                currencyUnits: "WVD",   //Wakandan Vibranium Dollar
-                weeklySpendingLimit: null,
-                weeklySpendingLimitExhausted: null
-            },
-            {
-                cardNumberVisible: false,
-                cardNumber: "1234567887650000",
-                cardValidThru: "11/36",
-                cardCVV: "777",
-                nameOnCard: "James Rhodes",
-                availableBalance: "68,000",
-                currencyUnits: "USD",
-                weeklySpendingLimit: null,
-                weeklySpendingLimitExhausted: null
-            },
-        ]
-        let randomIdx = Math.floor(Math.random() * dummyCardDetails.length);
-        dispatch(
-            setCompleteCardDetails(dummyCardDetails[randomIdx])
+    const cardDetailsApi = async (userId) => {
+        if(userId == null){
+            return;
+        }
+        const response = await debitCardDetailsAPI.get('/cardDetails/'+userId)
+        .then()
+        .catch((error) => {
+            console.log(response);
+            console.log(error);
+            setIndicatorDisplayed(false);
+            return createOneButtonAlert("Error", "Error Encountered in fetching data");
+            }
         );
+        
+        setIndicatorDisplayed(false);
+        if(response.status != 200){
+            return;
+        }
+        else{
+            console.log("Response : ");
+            console.log(response);
+            let tempCardDetails = response.data;
+            if(tempCardDetails.cardNumber != null){
+                dispatch(
+                    setCompleteCardDetails(response.data)
+                );
+                setCardDetails(response.data);  // The API returns just card details JSON in case of successfull query
+            }
+            else{
+                return createOneButtonAlert("Error", "No Cards Registered for the your ID");
+            }
+        }
+    }
+
+    const fetchRandomCardDetails = () => {
+        // let tempInitialCard = [
+        //     {
+        //         "availableBalance" : 420000,
+        //         "cardCVV" : "000",
+        //         "cardNumber" : 12345678912345678,
+        //         "cardNumberVisible" : false,
+        //         "cardValidThru" : "12/30",
+        //         "currencyUnits" : "INR",
+        //         "nameOnCard" : "Shivanshu Chaudhary",
+        //         "weeklySpendingLimit": -1,
+        //         "weeklySpendingLimitExhausted": -1
+        //     },
+        //     {
+        //         "cardNumberVisible": false,
+        //         "cardNumber": "1234567800000001",
+        //         "cardValidThru": "01/25",
+        //         "cardCVV": "001",
+        //         "nameOnCard": "Tony Stark",
+        //         "availableBalance": 97000000,
+        //         "currencyUnits": "USD",
+        //         "weeklySpendingLimit": 10000,
+        //         "weeklySpendingLimitExhausted": 3000
+        //     }
+        // ]
+        // let randomIdx = Math.floor(Math.random() * tempInitialCard.length);
+        // dispatch(
+        //     setCompleteCardDetails(tempInitialCard[randomIdx])
+        // );
+        
+        
+        let randomIdx = Math.floor(Math.random() * dummyUserIDsList.length);
+        setIndicatorDisplayed(true);
+        cardDetailsApi(dummyUserIDsList[randomIdx]);
     }
 
     useEffect(() => {
-        setRandomCardDetails();
+        fetchRandomCardDetails();
     }, []);
+
+
+    const createOneButtonAlert = (title, message) =>
+        Alert.alert(
+            title,
+            message,
+            [
+                {
+                text: "OK",
+                onPress: () => console.log("OK Pressed"),
+                }
+            ]
+    );
     
     return (
         <SafeAreaView style={styles.background}>
@@ -142,12 +152,21 @@ const DebitCardControlCenterScreen = (props) => {
             <PopUpCard props={props}/>
             <FAB 
                 title="Load Another Card"
-                onPress = {setRandomCardDetails}
+                onPress = {fetchRandomCardDetails}
                 size="small"
                 overlayColor="#01D167"
                 color="#01D167"
                 placement='right'
             />
+            <View 
+                style={indicatorDisplayed ? styles.loadingOverlay : {display: 'none'}}
+            >
+                <ActivityIndicator 
+                    size="large"
+                    color="#000"
+                />
+                <Text style={{textAlign:'center', fontSize: 15, fontWeight: '700'}}>Fetching Debit Card Details.</Text>
+            </View>
         </SafeAreaView>
     )
 }
@@ -176,5 +195,13 @@ const styles = StyleSheet.create({
         height: height,
         top: 0,
         backgroundColor: 'white',
-    }  
+    } ,
+    loadingOverlay:{
+        height:height, 
+        width:width, 
+        backgroundColor: 'rgba(0,0,0,0.25)', 
+        position:'absolute', 
+        alignContent:'center', 
+        justifyContent:'center'
+    },
 })

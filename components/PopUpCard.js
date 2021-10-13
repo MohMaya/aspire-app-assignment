@@ -54,7 +54,7 @@ const PopUpCard = (props) => {
     let spendingLimit = useSelector(selectWeeklySpendingLimit);
     let spendingLimitExhausted = useSelector(selectWeeklySpendingLimitExhausted);
     let currencyUnits = useSelector(selectCurrencyUnits);
-    let isSpendingLimitSet = (spendingLimit != null);
+    let isSpendingLimitSet = (spendingLimit != null && spendingLimit > 0);
     let scrollheight = isSpendingLimitSet ? 580 : 540;
     // let cardNumberForDisplay = () => {
     //     if(cardDetailsDisplayed()){

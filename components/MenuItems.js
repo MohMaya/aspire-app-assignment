@@ -50,7 +50,7 @@ const renderButton = (buttonState) => {
 const MenuItems = props => {
     let spendingLimit = useSelector(selectWeeklySpendingLimit);
     let currencyUnits = useSelector(selectCurrencyUnits);
-    let isSpendingLimitSet = (spendingLimit != null);
+    let isSpendingLimitSet = (spendingLimit != null && spendingLimit > 0);
     const dispatch = useDispatch();
 
     let menuArr = [

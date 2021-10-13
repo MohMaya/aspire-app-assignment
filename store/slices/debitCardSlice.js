@@ -24,11 +24,11 @@ export const debitCardSlice = createSlice({
     reducers: {
         setCompleteCardDetails: (state, action) => {
             state.cardNumberVisible = action.payload.cardNumberVisible;
-            state.cardNumber = action.payload.cardNumber;
+            state.cardNumber = ''+action.payload.cardNumber;
             state.cardValidThru = action.payload.cardValidThru;
             state.cardCVV = action.payload.cardCVV;
             state.nameOnCard = action.payload.nameOnCard;
-            state.availableBalance = action.payload.availableBalance;
+            state.availableBalance = ''+action.payload.availableBalance;
             state.currencyUnits = action.payload.currencyUnits;
             state.weeklySpendingLimit = action.payload.weeklySpendingLimit;
             state.weeklySpendingLimitExhausted = action.payload.weeklySpendingLimitExhausted;
