@@ -1,18 +1,18 @@
 import React, { Component, useEffect, useState } from 'react'
-import { StyleSheet, View, SafeAreaView, Image, Dimensions, ActivityIndicator, Alert } from 'react-native'
+import { StyleSheet, View, SafeAreaView, Image, Dimensions, Alert } from 'react-native'
 import { Text, FAB } from 'react-native-elements';
 import tw from 'tailwind-react-native-classnames';
 // import popUpCards from '../components/popUpCard';
 // import { useDispatch } from 'react-redux';
 import PopUpCard from '../components/PopUpCard';
 import { selectAvailableBalance, selectCurrencyUnits, setCompleteCardDetails } from '../store/slices/debitCardSlice';
+import { setIsLoadingIndicatorDisplayed, setLoadingIndicatorText} from '../store/slices/appVariablesSlice';
 import { setUserId } from '../store/slices/userSlice';
 import { useNavigationState } from '@react-navigation/core';
 import { useDispatch, useSelector, useStore } from 'react-redux';
 import debitCardDetailsAPI from '../api/debitCardDetailsAPI';
 
 const {width, height} = Dimensions.get('screen');
-let firstLoad_FLAG = true;
 
 let dummyUserIDsList = [
                             "ee7bb6a818df311024b3a6e705e55945",
@@ -32,7 +32,19 @@ const DebitCardControlCenterScreen = (props) => {
     let availableBalance = useSelector(selectAvailableBalance);
 
     const [cardDetails, setCardDetails] = useState([]);
-    const [indicatorDisplayed, setIndicatorDisplayed] = useState(false)
+
+    const manageLoadingIndicator = (displayFlag, message) => {
+        dispatch(
+            setIsLoadingIndicatorDisplayed({
+                isLoadingIndicatorDisplayed: displayFlag,
+            })
+        )
+        dispatch(
+            setLoadingIndicatorText({
+                loadingIndicatorText: message,
+            })
+        )
+    }
 
     const cardDetailsApi = async (userId) => {
         if(userId == null){
@@ -41,12 +53,12 @@ const DebitCardControlCenterScreen = (props) => {
         const response = await debitCardDetailsAPI.get('/cardDetails/'+userId)
         .then()
         .catch((error) => {
-            setIndicatorDisplayed(false);
+            manageLoadingIndicator(false, "");
             return createOneButtonAlert("Error", "Error Encountered in fetching data");
             }
         );
         
-        setIndicatorDisplayed(false);
+        manageLoadingIndicator(false, "");
         if(response.status != 200){
             return;
         }
@@ -72,7 +84,7 @@ const DebitCardControlCenterScreen = (props) => {
                 userId: dummyUserIDsList[randomIdx],
             })
         )
-        setIndicatorDisplayed(true);
+        manageLoadingIndicator(true, "Fetching Debit Card Details");
         cardDetailsApi(dummyUserIDsList[randomIdx]);
     }
 
@@ -131,15 +143,6 @@ const DebitCardControlCenterScreen = (props) => {
                 color="#01D167"
                 placement='right'
             />
-            <View 
-                style={indicatorDisplayed ? styles.loadingOverlay : {display: 'none'}}
-            >
-                <ActivityIndicator 
-                    size="large"
-                    color="#000"
-                />
-                <Text style={{textAlign:'center', fontSize: 15, fontWeight: '700'}}>Fetching Debit Card Details.</Text>
-            </View>
         </SafeAreaView>
     )
 }
@@ -168,13 +171,5 @@ const styles = StyleSheet.create({
         height: height,
         top: 0,
         backgroundColor: 'white',
-    },
-    loadingOverlay:{
-        height:height, 
-        width:width, 
-        backgroundColor: 'rgba(0,0,0,0.25)', 
-        position:'absolute', 
-        alignContent:'center', 
-        justifyContent:'center'
     },
 })

@@ -1,9 +1,10 @@
 import React, { useEffect, useState } from 'react'
-import { Dimensions, StyleSheet, Text, View, Image, TextInput, Alert, ActivityIndicator } from 'react-native'
+import { Dimensions, StyleSheet, Text, View, Image, TextInput, Alert } from 'react-native'
 import { Button } from 'react-native-elements';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { useDispatch, useSelector } from 'react-redux';
 import { selectCardNumber, selectCurrencyUnits, setWeeklySpendingLimit, setWeeklySpendingLimitExhausted } from '../store/slices/debitCardSlice';
+import { setIsLoadingIndicatorDisplayed, setLoadingIndicatorText} from '../store/slices/appVariablesSlice';
 import debitCardDetailsAPI from '../api/debitCardDetailsAPI';
 import { selectUserId } from '../store/slices/userSlice';
 
@@ -13,8 +14,7 @@ const SpendingLimitBottomComponent = (props) => {
     
     let [number, onChangeNumber] = useState(null);
     let [isSaveButtonActive, setIsSaveButtonActive] = useState(false);
-    let [indicatorDisplayed, setIndicatorDisplayed] = useState(false);
-
+    
     const dispatchEvent = useDispatch();
     const currencyUnits = useSelector(selectCurrencyUnits);
     const cardNumber = useSelector(selectCardNumber);
@@ -32,6 +32,18 @@ const SpendingLimitBottomComponent = (props) => {
         onChangeNumber(val);
     }
 
+    const manageLoadingIndicator = (displayFlag, message) => {
+        dispatchEvent(
+            setIsLoadingIndicatorDisplayed({
+                isLoadingIndicatorDisplayed: displayFlag,
+            })
+        )
+        dispatchEvent(
+            setLoadingIndicatorText({
+                loadingIndicatorText: message,
+            })
+        )
+    }
 
     const createOneButtonAlert = (title, message) =>
         Alert.alert(
@@ -67,7 +79,7 @@ const SpendingLimitBottomComponent = (props) => {
             // Response is designed to be in the form of 
             // For: setSpendingLimitf -> {success: "false", reason: "You are not allowed to set spending limit. Contact your administrator", limitExhausted: -1}    //The setting/removal failed at backend due to a restriction by card manager
             // For: setSpendingLimits -> {success: "true", reason: "", limitExhausted: <numericalValue>} //Limit set successfully
-            setIndicatorDisplayed(false);
+            manageLoadingIndicator(false, "")
             if(response.status != 200){
                 return createOneButtonAlert("Error", "Error Encountered in Setting Spending Limit");
             }
@@ -92,7 +104,7 @@ const SpendingLimitBottomComponent = (props) => {
         .catch((error) => {
             console.log(response);
             console.log(error);
-            setIndicatorDisplayed(false);
+            manageLoadingIndicator(false, "");
             return createOneButtonAlert("Error", "Error Encountered in Setting Spending Limit");
         });
         
@@ -100,7 +112,7 @@ const SpendingLimitBottomComponent = (props) => {
 
     const onSaveButtonPress = () => {
         console.log("Save Button Pressed For Amount = "+number);
-        setIndicatorDisplayed(true);
+        manageLoadingIndicator(true, "Setting weekly spending limit");
         updateSpendingLimitApi(number);
     }
 
@@ -185,15 +197,6 @@ const SpendingLimitBottomComponent = (props) => {
                     />
                 </View>
             </View>
-        </View>
-        <View 
-            style={indicatorDisplayed ? styles.loadingOverlay : {display: 'none'}}
-        >
-            <ActivityIndicator 
-                size="large"
-                color="#000"
-            />
-            <Text style={{textAlign:'center', fontSize: 15, fontWeight: '700'}}>Setting Spending Limit.</Text>
         </View>
     </View>
     )

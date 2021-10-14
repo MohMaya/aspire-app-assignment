@@ -1,11 +1,12 @@
 import React from 'react'
-import { StyleSheet, Text, View, Dimensions, FlatList, TouchableOpacity, Image } from 'react-native'
+import { StyleSheet, Text, View, Dimensions, FlatList, TouchableOpacity, Image, Alert } from 'react-native'
 import { LinearProgress } from 'react-native-elements';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { useDispatch, useSelector, useStore } from 'react-redux';
 // import MenuItems from './MenuItems';
 import CardView from './CardView';
-import { selectCardNumber, selectCurrencyUnits, selectWeeklySpendingLimit, selectWeeklySpendingLimitExhausted } from '../store/slices/debitCardSlice';
+import { selectCardNumber, selectCurrencyUnits, selectWeeklySpendingLimit, selectWeeklySpendingLimitExhausted, setWeeklySpendingLimit, setWeeklySpendingLimitExhausted } from '../store/slices/debitCardSlice';
+import { setIsLoadingIndicatorDisplayed, setLoadingIndicatorText} from '../store/slices/appVariablesSlice';
 import { selectUserId } from '../store/slices/userSlice';
 import debitCardDetailsAPI from '../api/debitCardDetailsAPI';
 
@@ -98,7 +99,7 @@ const createOneButtonAlert = (title, message) =>
             message,
             [
                 {
-                text: "Go back.",
+                text: "OK",
                 onPress: () => {},
                 }
             ]
@@ -119,16 +120,6 @@ const PopUpCard = (props) => {
     let currencyUnits = useSelector(selectCurrencyUnits);
     let isSpendingLimitSet = (spendingLimit != null && spendingLimit > 0);
     let scrollheight = isSpendingLimitSet ? 580 : 540;
-    // let cardNumberForDisplay = () => {
-    //     if(cardDetailsDisplayed()){
-    //         return cardNumber()
-    //     }
-    //     else{
-    //         return cardNumber().substring(12,16)
-    //     }
-    // };
-    // const dispatch = useDispatch();
-    
     
     let menuArr = [
         {
@@ -173,6 +164,19 @@ const PopUpCard = (props) => {
         }
     ];
 
+    const manageLoadingIndicator = (displayFlag, message) => {
+        dispatchEvent(
+            setIsLoadingIndicatorDisplayed({
+                isLoadingIndicatorDisplayed: displayFlag,
+            })
+        )
+        dispatchEvent(
+            setLoadingIndicatorText({
+                loadingIndicatorText: message,
+            })
+        )
+    }
+
     const removeSpendingLimitApi = async () => {
         
         const params = {
@@ -187,6 +191,7 @@ const PopUpCard = (props) => {
     
         const response = debitCardDetailsAPI.post(randomizedSucessfulApi, params)
         .then(response => {
+            manageLoadingIndicator(false, "");
             // Response is designed to be in the form of 
             // For: setSpendingLimitf -> {success: "false", reason: "You are not allowed to remove spending limit. Contact your administrator", limitExhausted: -1}    //The setting/removal failed at backend due to a restriction by card manager
             // For: setSpendingLimits -> {success: "true", reason: "", limitExhausted: <numericalValue>} //Limit set successfully
@@ -214,6 +219,7 @@ const PopUpCard = (props) => {
         .catch((error) => {
             console.log(response);
             console.log(error);
+            manageLoadingIndicator(false, "");
             // setIndicatorDisplayed(false);
             return createOneButtonAlert("Error", "Error Encountered in Removing Spending Limit");
         });
@@ -227,10 +233,11 @@ const PopUpCard = (props) => {
             case "MenuItem#2":
                 if(buttonState == 0){
                     //i.e. The Spending limit is not set ->  Open the Spending Limits screen
-                    props.props.props.navigation.push('SpendingLimit');
+                    props.props.navigation.push('SpendingLimit');
                 }
                 else if(buttonState == 1){
                     //i.e. The Spending limit is already set, unset it
+                    manageLoadingIndicator(true, "Removing Spending Limit");
                     removeSpendingLimitApi();
                 }
                 
@@ -256,10 +263,7 @@ const PopUpCard = (props) => {
         //243-> Top Transparent view
 
     //Calculating padding below menu items
-    const extraPaddingNeeded = (totalMenuItemHeight > (height-40)) ? 50 : ((height-40)-totalMenuItemHeight);
-    console.log("totalMenuItemHeight = "+totalMenuItemHeight);
-    console.log("Device Height = "+height);
-    console.log("extraPaddingNeeded = "+extraPaddingNeeded);
+    const extraPaddingNeeded = (totalMenuItemHeight > (height-40)) ? 60 : ((height-40)-totalMenuItemHeight);
     
     return (
         <SafeAreaView style={{top:0, bottom:0, ...styles.behind}}>
@@ -282,11 +286,6 @@ const PopUpCard = (props) => {
                                 {/* A view that stays transparent */}
                             </View>
                             <CardView />
-                            {/* <View style={{backgroundColor: 'white', alignItems: 'center', height: scrollheight, borderRadius: 18, shadowOpacity: 0.5}}> */}
-                                {/* The view that scrolls up if needed */}
-                                
-                                {/* <View style={{height: scrollheight, marginTop: 26, marginBottom: 30, marginLeft: 24, marginRight: 24, width: width-48}}></View> */}
-                            {/* </View> */}
                         </View>
                         {renderSpendingLimitBar(isSpendingLimitSet, spendingLimitExhausted, spendingLimit, currencyUnits)}
                     </View>

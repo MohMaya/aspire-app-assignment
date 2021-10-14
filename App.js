@@ -7,6 +7,7 @@ import { SafeAreaProvider } from 'react-native-safe-area-context';
 import { NavigationContainer } from '@react-navigation/native';
 import { store } from './store/store';
 import NavStack from './navigation/NavStack';
+import LoadingIndicator from './components/LoadingIndicator';
 
 export default function App() {
   return (
@@ -14,6 +15,7 @@ export default function App() {
       <NavigationContainer>
         <SafeAreaProvider>
             {/* <Tabs /> */}
+            <LoadingIndicator />
             <NavStack />
         </SafeAreaProvider>
       </NavigationContainer>

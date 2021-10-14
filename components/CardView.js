@@ -60,15 +60,6 @@ const CardView = () => {
     let cardCVV = useSelector(selectCardCVV);//selectCardCVV;
     let nameOnCard = useSelector(selectNameOnCard);//selectNameOnCard;
     
-    // useEffect(() => {
-    //     console.log("Use Effect Trigerred for cardview");
-    //     if(cardDetailsDisplayed == null || cardNumber == null || cardValidThru == null || cardCVV == null || nameOnCard == null){
-    //         return;//No Changes if any of the values are null
-    //     }
-    //     else{
-    //         // cardViewRef.current;
-    //     }
-    // }, [cardDetailsDisplayed]);
 
     return (
         <View style={{backgroundColor: 'transparent', width: CARD_WIDTH, height: CARD_HEIGHT+32, marginTop: -90}}>
@@ -91,7 +82,6 @@ const CardView = () => {
                         />
                     }
                     onPress={() => {
-                        console.log("Show card pressed");
                         if(cardDetailsDisplayed){
                             dispatch(setCardNumberVisible({
                                 cardNumberVisible: false,
@@ -146,7 +136,7 @@ const CardView = () => {
                     />
                 </View>
             </View>
-            <View style={{backgroundColor: 'white', width: width, height: 65, borderTopRightRadius: 18, borderTopLeftRadius: 18, marginBottom: 0, marginTop: -65, marginLeft: -24, marginRight: -24}} />
+            <View style={{backgroundColor: 'white', width: width, height: 85, borderTopRightRadius: 18, borderTopLeftRadius: 18, marginBottom: 0, marginTop: -85, marginLeft: -24, marginRight: -24}} />
         </View>
     )
 }
