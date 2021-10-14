@@ -44,7 +44,7 @@ expo start
 ## Screenshots - Android 11; Large Screen
 ![android_6.jpeg](https://www.dropbox.com/s/gn7ygtniflj6gel/android_6.jpeg?dl=0&raw=1)
 
-## Screengrab - iOS 14.5; iPhone 8
+## Screengrab - iOS 14.5; iPhone 8 (recorded at 5FPS for 60 seconds)
 ![iOS Screen Grab](https://github.com/MohMaya/aspire-app-assignment/blob/master/iOS_Screengrab.gif)
 
 

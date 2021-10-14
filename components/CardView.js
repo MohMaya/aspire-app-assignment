@@ -91,6 +91,7 @@ const CardView = () => {
                         />
                     }
                     onPress={() => {
+                        console.log("Show card pressed");
                         if(cardDetailsDisplayed){
                             dispatch(setCardNumberVisible({
                                 cardNumberVisible: false,
@@ -106,7 +107,7 @@ const CardView = () => {
                     }}
                 />
             </View>
-            <View style={{backgroundColor: '#01D167', width: CARD_WIDTH, height: CARD_HEIGHT, borderRadius: 10, marginTop: -13, padding: 0, ...styles.shadow}}>
+            <View style={{backgroundColor: '#01D167', width: CARD_WIDTH, height: CARD_HEIGHT, borderRadius: 10, marginTop: -13, padding: 0, ...styles.shadow, zIndex: 9999}}>
                 {/* A view for the actual card */}
                 <View style={{marginTop: 24, height: 21, marginRight: 24, alignItems:'flex-end'}}>
                     {/* View For Top Logo */}
@@ -145,6 +146,7 @@ const CardView = () => {
                     />
                 </View>
             </View>
+            <View style={{backgroundColor: 'white', width: width, height: 65, borderTopRightRadius: 18, borderTopLeftRadius: 18, marginBottom: 0, marginTop: -65, marginLeft: -24, marginRight: -24}} />
         </View>
     )
 }
