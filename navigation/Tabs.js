@@ -3,7 +3,8 @@ import { StyleSheet, Text, View, TouchableOpacity, Image } from 'react-native';
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 import DebitCardControlCenterScreen from '../screens/DebitCardControlCenterScreen';
 import { setCompleteCardDetails } from '../store/slices/debitCardSlice';
-import { useDispatch } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
+import { selectAppColorSolid } from '../store/slices/appVariablesSlice';
 
 
 const Tab = createBottomTabNavigator();
@@ -22,7 +23,7 @@ const secondaryUserData = {
 
 
 const Tabs = () => {
-
+    let appColorSolid = useSelector(selectAppColorSolid);
     return (
         <Tab.Navigator
             screenOptions={{
@@ -82,10 +83,10 @@ const Tabs = () => {
                                 style={{
                                     width:24,
                                     height:24,
-                                    tintColor: focused ? "#01D167" : "#DDD",
+                                    tintColor: focused ? appColorSolid : "#DDD",
                                 }}
                             />
-                            <Text style={{fontSize:9, color: focused ? "#01D167" : "#DDD",}}>Debit Card</Text>
+                            <Text style={{fontSize:9, color: focused ? appColorSolid : "#DDD",}}>Debit Card</Text>
                         {/* These elements will always be set to gray since they are not supposed to be focused as per the shared SR Doc */}
                         </View>
                     ),

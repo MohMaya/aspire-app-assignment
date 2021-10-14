@@ -2,6 +2,7 @@ import React, { useEffect } from 'react'
 import { StyleSheet, Text, View, Dimensions, Image } from 'react-native'
 import { Button } from 'react-native-elements';
 import { useDispatch, useSelector, useStore } from 'react-redux';
+import { selectAppColorSolid } from '../store/slices/appVariablesSlice';
 import { selectCardCVV, selectCardNumber, selectCardNumberVisible, selectCardValidThru, selectNameOnCard, setCardNumberVisible } from '../store/slices/debitCardSlice';
 
 const {width, height} = Dimensions.get('screen');
@@ -59,7 +60,7 @@ const CardView = () => {
     let cardValidThru = useSelector(selectCardValidThru);//selectCardValidThru;
     let cardCVV = useSelector(selectCardCVV);//selectCardCVV;
     let nameOnCard = useSelector(selectNameOnCard);//selectNameOnCard;
-    
+    let appColorSolid = useSelector(selectAppColorSolid);
 
     return (
         <View style={{backgroundColor: 'transparent', width: CARD_WIDTH, height: CARD_HEIGHT+32, marginTop: -90}}>
@@ -70,7 +71,7 @@ const CardView = () => {
                     type="clear"
                     title = {(cardDetailsDisplayed) ? "Hide card number" : "Show card number"}
                     titleStyle = {{
-                        color: '#01D167',
+                        color: appColorSolid,
                         fontSize: 12,
                         fontWeight: "600",
                     }}
@@ -97,7 +98,7 @@ const CardView = () => {
                     }}
                 />
             </View>
-            <View style={{backgroundColor: '#01D167', width: CARD_WIDTH, height: CARD_HEIGHT, borderRadius: 10, marginTop: -13, padding: 0, ...styles.shadow, zIndex: 9999}}>
+            <View style={{backgroundColor: appColorSolid, width: CARD_WIDTH, height: CARD_HEIGHT, borderRadius: 10, marginTop: -13, padding: 0, ...styles.shadow, zIndex: 9999}}>
                 {/* A view for the actual card */}
                 <View style={{marginTop: 24, height: 21, marginRight: 24, alignItems:'flex-end'}}>
                     {/* View For Top Logo */}

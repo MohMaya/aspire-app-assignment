@@ -6,7 +6,7 @@ import tw from 'tailwind-react-native-classnames';
 // import { useDispatch } from 'react-redux';
 import PopUpCard from '../components/PopUpCard';
 import { selectAvailableBalance, selectCurrencyUnits, setCompleteCardDetails } from '../store/slices/debitCardSlice';
-import { setIsLoadingIndicatorDisplayed, setLoadingIndicatorText} from '../store/slices/appVariablesSlice';
+import { selectAppColorSolid, setAppColorSolid, setIsLoadingIndicatorDisplayed, setLoadingIndicatorText} from '../store/slices/appVariablesSlice';
 import { setUserId } from '../store/slices/userSlice';
 import { useNavigationState } from '@react-navigation/core';
 import { useDispatch, useSelector, useStore } from 'react-redux';
@@ -24,12 +24,23 @@ let dummyUserIDsList = [
                             "226358da2235a5097e45f13b3eb35213"
                         ]
 
+let dummyUserIDsColorScheme = {
+    "ee7bb6a818df311024b3a6e705e55945":"#000",
+    "e9ac92ba8f8223309904c773483e0b35":"#aa0505",
+    "d32b8789f913925cb3b7d491a59e19fc":"#01d167",
+    "58a0723973209d6475b2b32e32ee8e7d":"#826a5f",
+    "46f7b46f7f6552c36e1a61f59bfb79c6":"#2B3784",
+    "4a9f64cbecd5b7bd5f7a7ce8b70a59ed":"#000",
+    "226358da2235a5097e45f13b3eb35213":"#10369c"
+}
+
 const DebitCardControlCenterScreen = (props) => {
     const store = useStore();
     const dispatch = useDispatch();
     let state = store.getState()
     let currency = useSelector(selectCurrencyUnits);
     let availableBalance = useSelector(selectAvailableBalance);
+    let appColorSolid = useSelector(selectAppColorSolid);
 
     const [cardDetails, setCardDetails] = useState([]);
 
@@ -68,6 +79,12 @@ const DebitCardControlCenterScreen = (props) => {
                 dispatch(
                     setCompleteCardDetails(response.data)
                 );
+                let tempCCode = dummyUserIDsColorScheme[userId];
+                dispatch(
+                    setAppColorSolid({
+                        appColorSolid: tempCCode,
+                    })
+                )
                 setCardDetails(response.data);  // The API returns just card details JSON in case of successfull query
             }
             else{
@@ -123,7 +140,7 @@ const DebitCardControlCenterScreen = (props) => {
                     <Text style={{color:'white', fontSize:14, marginTop: 22}}>Available balance</Text>
                     <View style={{marginTop: 15, flexDirection: 'row', alignItems: 'center'}}>
                         {/* View For Displaying Currency and available balance amount */}
-                        <View style={{backgroundColor:'#01D167', width:40, height:22, borderRadius: 4, alignItems:'center', justifyContent:'center'}}>
+                        <View style={{backgroundColor:appColorSolid, width:40, height:22, borderRadius: 4, alignItems:'center', justifyContent:'center'}}>
                             <Text style={{color:'white', fontWeight:'bold', fontSize:12}}>
                                 {currency}
                             </Text>
@@ -139,8 +156,8 @@ const DebitCardControlCenterScreen = (props) => {
                 title="Load Another Card"
                 onPress = {fetchRandomCardDetails}
                 size="small"
-                overlayColor="#01D167"
-                color="#01D167"
+                overlayColor={appColorSolid}
+                color={appColorSolid}
                 placement='right'
             />
         </SafeAreaView>

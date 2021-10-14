@@ -6,7 +6,7 @@ import { useDispatch, useSelector, useStore } from 'react-redux';
 // import MenuItems from './MenuItems';
 import CardView from './CardView';
 import { selectCardNumber, selectCurrencyUnits, selectWeeklySpendingLimit, selectWeeklySpendingLimitExhausted, setWeeklySpendingLimit, setWeeklySpendingLimitExhausted } from '../store/slices/debitCardSlice';
-import { setIsLoadingIndicatorDisplayed, setLoadingIndicatorText} from '../store/slices/appVariablesSlice';
+import { selectAppColorSolid, setAppColorSolid, setIsLoadingIndicatorDisplayed, setLoadingIndicatorText} from '../store/slices/appVariablesSlice';
 import { selectUserId } from '../store/slices/userSlice';
 import debitCardDetailsAPI from '../api/debitCardDetailsAPI';
 
@@ -19,7 +19,7 @@ const POP_UP_HEIGHT = (height >= 844) ? 0.73*height : 0.66*height;
 
 
 
-const renderSpendingLimitBar = (renderFlag, limitExhausted, totalLimit, currencyUnits) => {
+const renderSpendingLimitBar = (renderFlag, limitExhausted, totalLimit, currencyUnits, appColorSolid) => {
     if(renderFlag === true){
         return (
             <View style={{backgroundColor: 'white'}}>
@@ -28,13 +28,13 @@ const renderSpendingLimitBar = (renderFlag, limitExhausted, totalLimit, currency
                         {/* View for heading and numerical representation of limit*/}
                         <Text style={{color:'black', fontWeight:'400', fontSize:13, alignSelf:'flex-start', flex: 1}}>Debit card spending limit</Text>
                         <View style={{alignSelf:'flex-end', flexDirection: 'row'}}>
-                            <Text style={{color:'#01D167', fontWeight:'400', fontSize:12}}>{currencyUnits}{limitExhausted}</Text>
+                            <Text style={{color:appColorSolid, fontWeight:'400', fontSize:12}}>{currencyUnits}{limitExhausted}</Text>
                             <Text style={{color:'#222222', fontWeight:'300', fontSize:12}}> | {currencyUnits}{totalLimit}</Text>
                         </View>
                     </View>
                     <LinearProgress
-                        color="#01D167"
-                        trackColor="rgba(1,209,103,0.1)"
+                        color={appColorSolid}
+                        trackColor={appColorSolid+'10'}
                         variant='determinate'
                         value={limitExhausted/totalLimit}
                         style={{
@@ -119,6 +119,7 @@ const PopUpCard = (props) => {
     let userId = useSelector(selectUserId);
     let currencyUnits = useSelector(selectCurrencyUnits);
     let isSpendingLimitSet = (spendingLimit != null && spendingLimit > 0);
+    let appColorSolid = useSelector(selectAppColorSolid);
     let scrollheight = isSpendingLimitSet ? 580 : 540;
     
     let menuArr = [
@@ -287,7 +288,7 @@ const PopUpCard = (props) => {
                             </View>
                             <CardView />
                         </View>
-                        {renderSpendingLimitBar(isSpendingLimitSet, spendingLimitExhausted, spendingLimit, currencyUnits)}
+                        {renderSpendingLimitBar(isSpendingLimitSet, spendingLimitExhausted, spendingLimit, currencyUnits, appColorSolid)}
                     </View>
                 }
                 ListFooterComponent={

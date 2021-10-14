@@ -4,7 +4,7 @@ import { Button } from 'react-native-elements';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { useDispatch, useSelector } from 'react-redux';
 import { selectCardNumber, selectCurrencyUnits, setWeeklySpendingLimit, setWeeklySpendingLimitExhausted } from '../store/slices/debitCardSlice';
-import { setIsLoadingIndicatorDisplayed, setLoadingIndicatorText} from '../store/slices/appVariablesSlice';
+import { selectAppColorSolid, setIsLoadingIndicatorDisplayed, setLoadingIndicatorText} from '../store/slices/appVariablesSlice';
 import debitCardDetailsAPI from '../api/debitCardDetailsAPI';
 import { selectUserId } from '../store/slices/userSlice';
 
@@ -19,6 +19,7 @@ const SpendingLimitBottomComponent = (props) => {
     const currencyUnits = useSelector(selectCurrencyUnits);
     const cardNumber = useSelector(selectCardNumber);
     let userId = useSelector(selectUserId);
+    let appColorSolid = useSelector(selectAppColorSolid);
     const lastKnownLimit = "5,000";//Putting in dummy value as of now
     const presetValues = [5000, 10000, 20000];
 
@@ -137,7 +138,7 @@ const SpendingLimitBottomComponent = (props) => {
                     </View>
                     <View style={{marginTop: 13, height: 33, flexDirection: 'row', alignContent: 'flex-start'}}>
                         {/* View for Input */}
-                        <View style={{backgroundColor:'#01D167', borderRadius: 3, width: 40, height: 24, alignItems:'center', justifyContent:'center'}}>
+                        <View style={{backgroundColor:appColorSolid, borderRadius: 3, width: 40, height: 24, alignItems:'center', justifyContent:'center'}}>
                             {/* View of currency units */}
                             <Text style={{color:'#fff', fontSize: 16, fontWeight: '700'}}>{currencyUnits}</Text>
                         </View>
@@ -162,24 +163,25 @@ const SpendingLimitBottomComponent = (props) => {
                     {/* View for Preset Buttons */}
                     <Button
                         title={currencyUnits+" "+presetValues[0]}
-                        buttonStyle={{...styles.customButton, marginRight: 12}}
-                        titleStyle={styles.buttonTitle}
+                        buttonStyle={{...styles.customButton, marginRight: 12, backgroundColor: appColorSolid+'07',}}
+                        titleStyle={{...styles.buttonTitle, color: appColorSolid}}
                         onPress={() => {
                             onChangeNumberMiddle(''+presetValues[0]);
                         }}
                     />
                     <Button
                         title={currencyUnits+" "+presetValues[1]}
-                        buttonStyle={{...styles.customButton, marginRight: 12}}
-                        titleStyle={styles.buttonTitle}
+                        buttonStyle={{...styles.customButton, marginRight: 12, backgroundColor: appColorSolid+'07',}}
+                        titleStyle={{...styles.buttonTitle, color: appColorSolid}}
                         onPress={() => {
                             onChangeNumberMiddle(''+presetValues[1]);
                         }}
                     />
                     <Button
                         title={currencyUnits+" "+presetValues[2]}
-                        buttonStyle={{...styles.customButton, marginRight: 12}}
-                        titleStyle={styles.buttonTitle}
+                        buttonStyle={{...styles.customButton, marginRight: 12, backgroundColor: appColorSolid+'07',
+                    }}
+                        titleStyle={{...styles.buttonTitle, color: appColorSolid}}
                         onPress={() => {
                             onChangeNumberMiddle(''+presetValues[2]);
                         }}
@@ -190,7 +192,7 @@ const SpendingLimitBottomComponent = (props) => {
                     <View style={{flex:1}}>{/* A Blank View put up as a spacer */}</View>
                     <Button
                         title={"Save"}
-                        buttonStyle={styles.saveButtonActive}
+                        buttonStyle={{...styles.saveButtonActive, backgroundColor:appColorSolid}}
                         titleStyle={{color:"#FFF", fontSize: 16}}
                         disabled={!(isSaveButtonActive)}
                         onPress={onSaveButtonPress}
@@ -219,7 +221,6 @@ const styles = StyleSheet.create({
         justifyContent: 'flex-start',
     },
     customButton: {
-        backgroundColor: 'rgba(32,209,103,0.07)',
         borderRadius: 4,
         height: 40,
         width: (width-72)/3,
@@ -227,7 +228,6 @@ const styles = StyleSheet.create({
         justifyContent:'center',
     },
     buttonTitle:{
-        color: '#01D167',
         fontSize: 12,
         fontWeight: '600',
     },
@@ -235,7 +235,6 @@ const styles = StyleSheet.create({
         height: 56,
         marginLeft: 33,
         marginRight: 33,
-        backgroundColor: '#01D167',
         borderRadius: 30,
         alignItems:'center',
         justifyContent:'center',
