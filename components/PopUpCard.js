@@ -265,7 +265,6 @@ const PopUpCard = (props) => {
 
     //Calculating padding below menu items
     const extraPaddingNeeded = (totalMenuItemHeight > (height-40)) ? 60 : ((height-40)-totalMenuItemHeight);
-    
     return (
         <SafeAreaView style={{top:0, bottom:0, ...styles.behind}}>
             <FlatList 
@@ -283,7 +282,7 @@ const PopUpCard = (props) => {
                 ListHeaderComponent={
                     <View>
                         <View style={{alignItems: 'center'}}>
-                            <View style={{backgroundColor:'transparent', flex: 1, height: 243}}>
+                            <View style={{backgroundColor:'transparent', flex: 1, height: height*0.35}}>
                                 {/* A view that stays transparent */}
                             </View>
                             <CardView />
@@ -292,13 +291,13 @@ const PopUpCard = (props) => {
                     </View>
                 }
                 ListFooterComponent={
-                    <View style={{backgroundColor: 'white', height: extraPaddingNeeded}}/>
+                    <View style={{backgroundColor: 'white', height: extraPaddingNeeded, marginTop: -1}}/>
                     //Padding at bottom
                 }
                 data={menuArr}
                 renderItem={({item}) => {
                     return (
-                        <View style={{backgroundColor: 'white', zIndex: -100}}>
+                        <View style={{backgroundColor: 'white', zIndex: -100, marginTop: -1}}>
                             <View style={{marginLeft: 24, marginRight: 24}}>
                                 <TouchableOpacity
                                     onPress={() => {
