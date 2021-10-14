@@ -92,11 +92,11 @@ const DebitCardControlCenterScreen = (props) => {
                 }
             ]
     );
-    
+    const paddingTop = (height > 700) ? 48 : 20;//Based on an observation in a bezelless android device
     return (
         <SafeAreaView style={styles.background}>
             <View style={tw `p-0`}>
-                <View style={{paddingLeft:24}}>
+                <View style={{paddingLeft:24, paddingTop: paddingTop}}>
                     <View style={styles.container}>
                         <Image
                             style={{

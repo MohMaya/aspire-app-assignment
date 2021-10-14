@@ -132,9 +132,11 @@ const SpendingLimitBottomComponent = (props) => {
                         <TextInput
                             style={styles.input}
                             onChangeText={onChangeNumberMiddle}
+                            onSubmitEditing={onSaveButtonPress}
                             value={number}
                             placeholder="Amount"
                             keyboardType="numeric"
+                            returnKeyType='done'
                         />
                     </View>
                     <View style={{backgroundColor:'#E5E5E5', height:0.5, marginTop: 5}}/>

@@ -7,6 +7,9 @@ import { SafeAreaProvider } from 'react-native-safe-area-context';
 import { NavigationContainer } from '@react-navigation/native';
 import { store } from './store/store';
 import NavStack from './navigation/NavStack';
+import { LogBox } from 'react-native';
+
+LogBox.ignoreAllLogs();//Ignore all log notifications
 
 export default function App() {
   return (
